@@ -1,7 +1,7 @@
-import { GlobalVar } from './../../providers/global-var/global-var';
-import { HomePage } from './../home/home';
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
+
+import { AuthService } from './../../providers/auth-service/auth-service';
 
 @Component({
   selector: 'page-signin',
@@ -11,17 +11,18 @@ export class SigninPage {
 
   constructor(
     public navCtrl: NavController,
-    private _gv: GlobalVar
+    private _auth: AuthService
   ) {
 
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SigninPage');
+    console.log('==> ionViewDidLoad SigninPage');
   }
 
-  clickSignBtn() {
-    this._gv.setIsSignedIn(true);
-    this.navCtrl.setRoot(HomePage);
+  signInWithGoogle() {
+    this._auth.googleLogin()
+    .then(() =>  {})
+    .catch(error => console.log(error));;
   }
 }

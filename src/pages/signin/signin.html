@@ -2,6 +2,10 @@
 </ion-header>
 
 <ion-content padding>
-  <h3>Sign in Page</h3>
-  <button ion-button block (click)="clickSignBtn()" >SIGN IN & SIGN ON</button>
+  <h3>Ionic sing in page</h3>
+  <div>is logged in? : {{_auth.authenticated}}</div>
+  <div>id : {{_auth.currentUserId}}</div>
+  <div>name : {{_auth.currentUserDisplayName}}</div>
+  
+  <button ion-button outline (click)="signInWithGoogle()">SIGN IN</button>
 </ion-content>

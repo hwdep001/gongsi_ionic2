@@ -11,4 +11,7 @@ export class Tab1Page {
 
   }
 
+  ionViewDidLoad() {
+    console.log('==> ionViewDidLoad Tab1Page');
+  }
 }

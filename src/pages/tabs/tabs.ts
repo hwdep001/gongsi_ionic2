@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
 
-import { Tab3Page } from './tab3/tab3';
-import { Tab2Page } from './tab2/tab2';
 import { Tab1Page } from './tab1/tab1';
+import { Tab2Page } from './tab2/tab2';
+import { Tab3Page } from './tab3/tab3';
 
 @Component({
   selector: 'page-tabs',
@@ -18,4 +17,7 @@ export class TabsPage {
   constructor() {
   }
 
+  ionViewDidLoad() {
+    console.log('==> ionViewDidLoad TabsPage');
+  }
 }

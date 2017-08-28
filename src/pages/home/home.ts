@@ -1,7 +1,7 @@
-import { GlobalVar } from './../../providers/global-var/global-var';
-import { SigninPage } from './../signin/signin';
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController } from 'ionic-angular';
+
+import { AuthService } from './../../providers/auth-service/auth-service';
 
 @Component({
   selector: 'page-home',
@@ -11,18 +11,17 @@ export class HomePage {
 
   constructor(
     public navCtrl: NavController,
-    private _gv: GlobalVar
+    private _auth: AuthService
   ) {
 
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad HomePage');
+    console.log('==> ionViewDidLoad HomePage');
   }
 
   clickSignOutBtn() {
-    this._gv.setIsSignedIn(false);
-    this.navCtrl.setRoot(SigninPage);
+    this._auth.signOut();
   }
 
 }
