@@ -1,12 +1,12 @@
 This is a starter template for [Ionic](http://ionicframework.com/docs/) projects.
 
-## ajv
+## [ajv](https://github.com/epoberezkin/ajv)
 
 ```bash
 $ npm install ajv
 ```
 
-## promise-polyfill
+## [promise-polyfill](https://github.com/taylorhakes/promise-polyfill)
 
 ```bash
 $ npm install promise-polyfill --save-exact
@@ -14,16 +14,12 @@ $ npm install promise-polyfill --save-exact
 
 ## [storage](https://ionicframework.com/docs/storage/)
 
-`https://ionicframework.com/docs/storage/`:
-
 ```bash
 $ ionic cordova plugin add cordova-sqlite-storage
 $ npm install --save @ionic/storage
 ```
 
-## angularfire2 && firebase
-
-`https://github.com/angular/angularfire2/blob/master/docs/1-install-and-setup.md`
+## [angularfire2 && firebase](https://github.com/angular/angularfire2/blob/master/docs/1-install-and-setup.md)
 
 ```bash
 $ npm install -g @angular/cli@latest
@@ -32,7 +28,7 @@ $ npm install -g typescript
 $ npm install angularfire2 firebase --save
 ```
 
-## Cordova OAuth login
+## [Cordova OAuth login](https://firebase.google.com/docs/auth/web/cordova)
 
 ```bash
 # Plugin to pass application build info (app name, ID, etc) to the OAuth widget.
