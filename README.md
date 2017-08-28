@@ -25,11 +25,18 @@ $ ionic cordova run ios
 Substitute ios for android if not on a Mac.
 
 ## Update
-ajv
-    npm install ajv
+
+ajv:
+
+```bash
+$ npm install ajv
+```
 
 ## Install
-storage
-    https://ionicframework.com/docs/storage/
-    ionic cordova plugin add cordova-sqlite-storage
-    npm install --save @ionic/storage
+
+storage `https://ionicframework.com/docs/storage/`:
+
+```bash
+$ ionic cordova plugin add cordova-sqlite-storage
+$ npm install --save @ionic/storage
+```
