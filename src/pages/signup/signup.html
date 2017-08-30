@@ -8,8 +8,12 @@
   <ion-list>
     <ion-item>
       <ion-label stacked>Verification code</ion-label>
-      <ion-input type="text" [(ngModel)]="verificationCode"></ion-input>
+      <ion-input type="text" [(ngModel)]="verificationCode" name="code" spellcheck="false" autocapitalize="off" required>
+      </ion-input>
     </ion-item>
+    <p ion-text [hidden]="!errFlag" color="danger" padding-left>
+      {{errMsg}}
+    </p>
 
     <ion-item>
       <button ion-button block (click)="getAuth()">Get auth</button>

@@ -14,6 +14,9 @@ import { HomePage } from './../home/home';
 export class SignupPage {
 
   verificationCode: string;
+  isSubmitClick: boolean = false;
+  errMsg: string = "";
+  errFlag: boolean = false;
 
   constructor(
     private navCtrl: NavController,
@@ -37,20 +40,23 @@ export class SignupPage {
     const code = this.verificationCode;
 
     if(CommonUtil.isStringEmpty(code)){
-      this.showToast('top', "Please enter your verification code.");
-
+      this.errFlag = true;
+      this.errMsg = "Please enter your verification code.";
     }else {
       let stepResult: any = await this._verification.isUsableVerificationCode(code);
 
       if(stepResult == false){
         this.showToast('top', "This is an unusable authentication code.");
-
+        this.errFlag = true;
+        this.errMsg = "This is an unusable authentication code.";
       } else{
         stepResult = await this._verification.registerVerificationCode(code, this._auth.uid);
+        this.showToast('top', "Verification success!");
         this.menu.enable(true, 'menu');
         this.navCtrl.setRoot(HomePage)  
       }
     }
+    this.isSubmitClick = true;
   }
 
   showToast(position: string, message: string) {
@@ -63,4 +69,16 @@ export class SignupPage {
     toast.present(toast);
   }
 
+
+  test() {
+    let result: boolean = false;
+    
+    if(!this.isSubmitClick) {
+      return true;
+    } else if(!CommonUtil.isStringEmpty(this.verificationCode)) {
+      return true;
+    } else {
+      false;
+    }
+  }
 }
