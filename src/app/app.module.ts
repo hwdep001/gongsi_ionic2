@@ -13,6 +13,7 @@ import { AuthService } from '../providers/auth-service/auth-service';
 
 import { MyApp } from './app.component';
 import { SigninPage } from './../pages/signin/signin';
+import { SignupPage } from './../pages/signup/signup';
 import { HomePage } from './../pages/home/home';
 import { TabsPage } from './../pages/tabs/tabs';
 import { Tab3Page } from './../pages/tabs/tab3/tab3';
@@ -24,6 +25,7 @@ import { GlobalVar } from '../providers/global-var/global-var';
   declarations: [
     MyApp,
     SigninPage,
+    SignupPage,
     HomePage,
     TabsPage,
     Tab1Page,
@@ -42,6 +44,7 @@ import { GlobalVar } from '../providers/global-var/global-var';
   entryComponents: [
     MyApp,
     SigninPage,
+    SignupPage,
     HomePage,
     TabsPage,
     Tab1Page,

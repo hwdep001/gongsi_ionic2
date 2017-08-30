@@ -8,6 +8,7 @@ import { Storage } from '@ionic/storage';
 import { AuthService } from './../providers/auth-service/auth-service';
 
 import { SigninPage } from './../pages/signin/signin';
+import { SignupPage } from './../pages/signup/signup';
 import { HomePage } from './../pages/home/home';
 import { TabsPage } from './../pages/tabs/tabs';
 
@@ -56,23 +57,25 @@ export class MyApp {
     this.pages.push(tabsPage);
   }
 
-  private subscribeAuth(): void {
+  subscribeAuth() {
     this.afAuth.authState.subscribe((auth) => {
-      
-      this._auth.authState = auth;
-
-      if (auth) {
-        this._auth.updateUserData();
-        this.rootPage = HomePage;
-        console.log("MyApp - authenticated: Sign in");
-      } else {
-        this.rootPage = SigninPage;
-        console.log("MyApp - authenticated: Sign out");
-      }
+      this.setRootPage(auth);
     });
   }
+  
+  async setRootPage(auth) {
+    const updateUserResult = await this._auth.updateUserDB();
 
-  private savePlatform(): void {
+    if (updateUserResult && auth) {
+      this.rootPage = SignupPage;
+      console.log("MyApp - authenticated: Sign in");
+    } else {
+      this.rootPage = SigninPage;
+      console.log("MyApp - authenticated: Sign out");
+    }
+  }
+
+  async savePlatform() {
 
     let thisPlatform = null;
 
@@ -86,8 +89,10 @@ export class MyApp {
       thisPlatform = "ios";
     }
 
-    this.storage.set("platform", thisPlatform)
-    .then(platform => console.log("MyApp - Current platform: " + platform));
+    await this.storage.set("platform", thisPlatform)
+    .then(platform => {
+      console.log("MyApp - Current platform: " + platform);
+    });
   }
 
   openPage(page) {

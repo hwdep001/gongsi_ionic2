@@ -1,0 +1,33 @@
+<ion-header>
+</ion-header>
+
+<ion-content padding *ngIf="!_auth.isAuthenticated">
+
+  <h3>SIGN UP</h3>
+
+  <ion-list>
+    <ion-item>
+      <ion-label stacked>Auth code</ion-label>
+      <ion-input type="text" [(ngModel)]="authCode"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <button ion-button block (click)="getAuth()">Get auth</button>
+      <button ion-button block color="danger" (click)="clickSignOutBtn()" >Sign out</button>
+    </ion-item>
+  </ion-list>
+
+
+  <br>
+  <ion-list>
+      <ion-item>
+        <div>is signed in? : {{_auth.isAuthenticated}}</div>
+        <div>id : {{_auth.uid}}</div>
+        <div>name : {{_auth.name}}</div>
+        <div>display name: {{_auth.currentUserDisplayName}}</div>
+        <br>
+        <div>is authenticated : {{_auth.isAuthenticated}}</div>
+      </ion-item>
+  </ion-list>
+
+</ion-content>
