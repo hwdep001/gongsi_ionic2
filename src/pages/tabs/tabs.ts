@@ -18,6 +18,6 @@ export class TabsPage {
   }
 
   ionViewDidLoad() {
-    console.log('==> ionViewDidLoad TabsPage');
+    // console.log('==> ionViewDidLoad TabsPage');
   }
 }

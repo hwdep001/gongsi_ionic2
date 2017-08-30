@@ -17,7 +17,7 @@ export class SigninPage {
   }
 
   ionViewDidLoad() {
-    console.log('==> ionViewDidLoad SigninPage');
+    // console.log('==> ionViewDidLoad SigninPage');
   }
 
   signInWithGoogle() {

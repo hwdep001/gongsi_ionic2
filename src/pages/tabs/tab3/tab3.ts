@@ -12,6 +12,6 @@ export class Tab3Page {
   }
 
   ionViewDidLoad() {
-    console.log('==> ionViewDidLoad Tab3Page');
+    // console.log('==> ionViewDidLoad Tab3Page');
   }
 }

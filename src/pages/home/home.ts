@@ -17,7 +17,7 @@ export class HomePage {
   }
 
   ionViewDidLoad() {
-    console.log('==> ionViewDidLoad HomePage');
+    // console.log('==> ionViewDidLoad HomePage');
   }
 
   clickSignOutBtn() {

@@ -29,7 +29,7 @@ export class SignupPage {
   }
 
   ionViewDidLoad() {
-    console.log('==> ionViewDidLoad SignupPage');
+    // console.log('==> ionViewDidLoad SignupPage');
   }
 
   clickSignOutBtn() {
