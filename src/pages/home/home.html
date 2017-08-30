@@ -10,4 +10,11 @@
 <ion-content padding>
   <h3>Home Page</h3>
   <button ion-button block (click)="clickSignOutBtn()" >SIGN OUT</button>
+
+  <div>is signed in? : {{_auth.isAuthenticated}}</div>
+  <div>id : {{_auth.uid}}</div>
+  <div>name : {{_auth.name}}</div>
+  <div>display name: {{_auth.currentUserDisplayName}}</div>
+  <br>
+  <div>is authenticated : {{_auth.isAuthenticated}}</div>
 </ion-content>

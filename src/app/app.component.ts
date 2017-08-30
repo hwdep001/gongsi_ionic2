@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform, MenuController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -18,14 +18,15 @@ import { TabsPage } from './../pages/tabs/tabs';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage:any;
+  rootPage: any;
+  menuTitle: string;
   pages: Array<{title: string, component: any}>;
-  isSignedIn = false;
   
   constructor(
     private platform: Platform,
     private statusBar: StatusBar, 
     private splashScreen: SplashScreen,
+    private menu: MenuController,
     private storage: Storage,
     private afAuth: AngularFireAuth,
     private _auth: AuthService
@@ -33,7 +34,6 @@ export class MyApp {
     console.log("MyApp - =======================");
     console.log("MyApp - Create a component.");
     this.initializeApp();
-    this.initializePages();
     this.subscribeAuth();
   }
 
@@ -49,7 +49,7 @@ export class MyApp {
     });
   }
 
-  private initializePages(): void {
+  private setPages(): void {
     const homePage = { title: 'Home', component: HomePage };
     const tabsPage = { title: 'Tabs', component: TabsPage };
     this.pages = [];
@@ -59,14 +59,22 @@ export class MyApp {
 
   subscribeAuth() {
     this.afAuth.authState.subscribe((auth) => {
-      this.setRootPage(auth);
+      this.initializeMenu(auth);
     });
   }
   
-  async setRootPage(auth) {
+  async initializeMenu(auth) {
+    this.menu.enable(false, 'menu');
+    this.menuTitle = "Menu";
+    this.setPages();
+
     const updateUserResult = await this._auth.updateUserDB();
 
-    if (updateUserResult && auth) {
+    if (updateUserResult && this._auth.isAuthenticated) {
+      this.menu.enable(updateUserResult == true, 'menu');
+      this.rootPage = HomePage;
+      console.log("MyApp - authenticated: Sign in");
+    } else if (updateUserResult && this._auth.isSignedIn) {
       this.rootPage = SignupPage;
       console.log("MyApp - authenticated: Sign in");
     } else {

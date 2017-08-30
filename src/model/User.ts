@@ -6,7 +6,7 @@ export class User {
     createDate: any;
     lastSigninDate: any;
     signinCnt: number;
-    signupCode: any;
+    verificationCode: any;
 
     constructor(){
 

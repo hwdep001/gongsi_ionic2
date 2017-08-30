@@ -42,8 +42,8 @@ export class AuthService {
     return this.isSignedIn ? this.user.signinCnt : null;
   }
 
-  get signupCode(): string {
-    return this.isSignedIn ? this.user.signupCode : null;
+  get verificationCode(): string {
+    return this.isSignedIn ? this.user.verificationCode : null;
   }
 
   get isSignedIn(): boolean {
@@ -51,7 +51,7 @@ export class AuthService {
   }
 
   get isAuthenticated(): boolean {
-    return (this.signupCode == '-1') ? false : true;
+    return (this.verificationCode == '-1') ? false : true;
   }
 
   // // // Returns
@@ -136,11 +136,11 @@ export class AuthService {
       .then(snapshot => {
         if(snapshot.exists()) {
           tempUser.signinCnt = ++snapshot.val().signinCnt;
-          tempUser.signupCode = snapshot.val().signupCode;
+          tempUser.verificationCode = snapshot.val().verificationCode;
         } else {
           tempUser.createDate = new Date();
           tempUser.signinCnt = 0;
-          tempUser.signupCode = -1;
+          tempUser.verificationCode = -1;
         }
         stepResult = true;
       })
@@ -176,7 +176,7 @@ export class AuthService {
           this.user.createDate = snapshot.val().createDate;
           this.user.lastSigninDate = snapshot.val().lastSigninDate;
           this.user.signinCnt = snapshot.val().signinCnt;
-          this.user.signupCode = snapshot.val().signupCode;
+          this.user.verificationCode = snapshot.val().verificationCode;
         } else {
           this.user = null;
         }

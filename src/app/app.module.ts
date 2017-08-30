@@ -10,6 +10,7 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
 
 import { AuthService } from '../providers/auth-service/auth-service';
+import { VerificationService } from '../providers/verification-service/verification-service';
 
 import { MyApp } from './app.component';
 import { SigninPage } from './../pages/signin/signin';
@@ -56,7 +57,8 @@ import { GlobalVar } from '../providers/global-var/global-var';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     GlobalVar,
-    AuthService
+    AuthService,
+    VerificationService
   ]
 })
 export class AppModule {}
