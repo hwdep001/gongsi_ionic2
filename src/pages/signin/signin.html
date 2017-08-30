@@ -3,10 +3,12 @@
 
 <ion-content padding>
   <h3>Ionic sing in page</h3>
-  <div>is logged in? : {{_auth.isAuthenticated}}</div>
+  <div>is signed in? : {{_auth.isSignedIn}}</div>
   <div>id : {{_auth.uid}}</div>
   <div>name : {{_auth.name}}</div>
   <div>display name: {{_auth.currentUserDisplayName}}</div>
+  <br>
+  <div>is authenticated : {{_auth.isAuthenticated}}</div>
   
   <button ion-button outline (click)="signInWithGoogle()">SIGN IN</button>
 </ion-content>

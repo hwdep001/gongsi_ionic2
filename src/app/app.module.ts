@@ -10,6 +10,7 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
 
 import { AuthService } from '../providers/auth-service/auth-service';
+import { GlobalVar } from '../providers/global-var/global-var';
 import { VerificationService } from '../providers/verification-service/verification-service';
 
 import { MyApp } from './app.component';
@@ -20,7 +21,10 @@ import { TabsPage } from './../pages/tabs/tabs';
 import { Tab3Page } from './../pages/tabs/tab3/tab3';
 import { Tab2Page } from './../pages/tabs/tab2/tab2';
 import { Tab1Page } from './../pages/tabs/tab1/tab1';
-import { GlobalVar } from '../providers/global-var/global-var';
+import { UserTabsPage } from './../pages/userTabs/userTabs';
+import { UserPage } from './../pages/userTabs/user/user';
+import { UserLogPage } from './../pages/userTabs/user-log/userLog';
+import { VerificationPage } from './../pages/userTabs/verification/verification';
 
 @NgModule({
   declarations: [
@@ -31,7 +35,11 @@ import { GlobalVar } from '../providers/global-var/global-var';
     TabsPage,
     Tab1Page,
     Tab2Page,
-    Tab3Page
+    Tab3Page,
+    UserTabsPage,
+    UserPage,
+    UserLogPage,
+    VerificationPage
   ],
   imports: [
     BrowserModule,
@@ -50,7 +58,11 @@ import { GlobalVar } from '../providers/global-var/global-var';
     TabsPage,
     Tab1Page,
     Tab2Page,
-    Tab3Page
+    Tab3Page,
+    UserTabsPage,
+    UserPage,
+    UserLogPage,
+    VerificationPage
   ],
   providers: [
     StatusBar,

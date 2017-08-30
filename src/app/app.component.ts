@@ -1,3 +1,4 @@
+import { UserTabsPage } from './../pages/userTabs/userTabs';
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, MenuController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -12,6 +13,17 @@ import { SignupPage } from './../pages/signup/signup';
 import { HomePage } from './../pages/home/home';
 import { TabsPage } from './../pages/tabs/tabs';
 
+export interface PageInterface {
+  title: string;
+  name?: string;
+  component: any;
+  icon: string;
+  signout?: boolean;
+  index?: number;
+  tabName?: string;
+  tabComponent?: any;
+}
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -20,7 +32,9 @@ export class MyApp {
 
   rootPage: any;
   menuTitle: string;
-  pages: Array<{title: string, component: any}>;
+  pages: PageInterface[];
+  adminPages: PageInterface[];
+  accountPages: PageInterface[];
   
   constructor(
     private platform: Platform,
@@ -50,11 +64,20 @@ export class MyApp {
   }
 
   private setPages(): void {
-    const homePage = { title: 'Home', component: HomePage };
-    const tabsPage = { title: 'Tabs', component: TabsPage };
+    const homePage: PageInterface = { title: '대시보드', name: 'HomePage',  component: HomePage, icon: 'home' };
+    const tabsPage: PageInterface = { title: 'Tabs', name: 'TabsPage', component: TabsPage, icon: 'home'};
+    const userTabsPage: PageInterface = { title: '사용자 관리', name: 'UserTabsPage', component: UserTabsPage, icon: 'people' };
+    const signOut: PageInterface = { title: '로그아웃', name: 'signOut', component: UserTabsPage, icon: 'log-out', signout: true };
+
     this.pages = [];
     this.pages.push(homePage);
     this.pages.push(tabsPage);
+
+    this.adminPages = [];
+    this.adminPages.push(userTabsPage);
+
+    this.accountPages = [];
+    this.accountPages.push(signOut);
   }
 
   subscribeAuth() {
@@ -103,10 +126,33 @@ export class MyApp {
     });
   }
 
-  openPage(page) {
+  async openPage(page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component);
+
+    if(page.signout){
+      await this._auth.signOut();
+    }else {
+      this.nav.setRoot(page.component);
+    }
+
   };
+
+  isActive(page: PageInterface) {
+    // let childNav = this.nav.getActiveChildNavs()[0];
+
+    // Tabs are a special case because they have their own navigation
+    // if (childNav) {
+    //   if (childNav.getSelected() && childNav.getSelected().root === page.tabComponent) {
+    //     return 'primary';
+    //   }
+    //   return;
+    // }
+
+    if (this.nav.getActive() && this.nav.getActive().name === page.name) {
+      return 'primary';
+    }
+    return;
+  }
 }
 

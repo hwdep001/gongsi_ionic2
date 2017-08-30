@@ -37,21 +37,22 @@ export class AuthService {
   get lastSigninDate(): string {
     return this.isSignedIn ? this.user.lastSigninDate : null;
   }
-
+  
   get signinCnt(): number {
     return this.isSignedIn ? this.user.signinCnt : null;
   }
-
+  
   get verificationCode(): string {
     return this.isSignedIn ? this.user.verificationCode : null;
   }
-
+  
   get isSignedIn(): boolean {
-    return this.user != null;
+    return this.user == null ? false : true;
   }
-
+  
   get isAuthenticated(): boolean {
-    return (this.verificationCode == '-1') ? false : true;
+    const code = this.verificationCode
+    return (code == null || code == '-1') ? false : true;
   }
 
   // // // Returns
