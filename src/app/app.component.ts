@@ -1,3 +1,4 @@
+import { MenuTitle, PageInterface } from './app.component';
 import { UserTabsPage } from './../pages/userTabs/userTabs';
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, MenuController } from 'ionic-angular';
@@ -24,6 +25,13 @@ export interface PageInterface {
   tabComponent?: any;
 }
 
+export interface MenuTitle {
+  header: string;
+  navigate: string;
+  admin: string;
+  account: string;
+}
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -31,10 +39,17 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any;
-  menuTitle: string;
-  pages: PageInterface[];
+  navigatePages: PageInterface[];
   adminPages: PageInterface[];
   accountPages: PageInterface[];
+  pageMap: Map<string, any> = new Map();
+  menuTitle: MenuTitle = {
+    header: null,
+    navigate: null,
+    admin: null,
+    account: null
+  }
+
   
   constructor(
     private platform: Platform,
@@ -69,15 +84,25 @@ export class MyApp {
     const userTabsPage: PageInterface = { title: '사용자 관리', name: 'UserTabsPage', component: UserTabsPage, icon: 'people' };
     const signOut: PageInterface = { title: '로그아웃', name: 'signOut', component: UserTabsPage, icon: 'log-out', signout: true };
 
-    this.pages = [];
-    this.pages.push(homePage);
-    this.pages.push(tabsPage);
+    this.navigatePages = [];
+    this.navigatePages.push(homePage);
+    this.navigatePages.push(tabsPage);
 
     this.adminPages = [];
     this.adminPages.push(userTabsPage);
 
     this.accountPages = [];
     this.accountPages.push(signOut);
+
+    this.navigatePages.forEach(page => {
+      this.pageMap.set(page.name, page.component);
+    });
+    this.adminPages.forEach(page => {
+      this.pageMap.set(page.name, page.component);
+    });
+    this.accountPages.forEach(page => {
+      this.pageMap.set(page.name, page.component);
+    });
   }
 
   subscribeAuth() {
@@ -88,14 +113,28 @@ export class MyApp {
   
   async initializeMenu(auth) {
     this.menu.enable(false, 'menu');
-    this.menuTitle = "Menu";
+    this.menuTitle.header = "Menu";
+    this.menuTitle.navigate = "Navigate";
+    this.menuTitle.admin = "Admin";
+    this.menuTitle.account = "Account";
     this.setPages();
 
     const updateUserResult = await this._auth.updateUserDB();
 
     if (updateUserResult && this._auth.isAuthenticated) {
+      
+      let currentPageName: string = null;
+      let currentPageComponent: PageInterface = null;
+      await this.storage.get("currnetPageName").then(val => currentPageName = val);
+      currentPageComponent = this.pageMap.get(currentPageName);
       this.menu.enable(updateUserResult == true, 'menu');
-      this.rootPage = HomePage;
+
+      if(currentPageComponent == null) {
+        this.rootPage = HomePage;
+      } else {
+        this.rootPage = currentPageComponent;
+      }
+
       console.log("MyApp - authenticated: Sign in");
     } else if (updateUserResult && this._auth.isSignedIn) {
       this.rootPage = SignupPage;
@@ -131,8 +170,10 @@ export class MyApp {
     // we wouldn't want the back button to show in this scenario
 
     if(page.signout){
+      this.storage.remove("currnetPageName");
       await this._auth.signOut();
     }else {
+      await this.storage.set("currnetPageName", page.name);
       this.nav.setRoot(page.component);
     }
 
