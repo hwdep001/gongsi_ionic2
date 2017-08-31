@@ -8,5 +8,11 @@
 </ion-header>
   
 <ion-content padding>
-  
+
+  <ion-list>
+    <ion-item class="text" *ngFor="let user of users | async">
+      {{user.$key}}: {{user.uid}} - {{user.name}}
+    </ion-item>
+  </ion-list>
+
 </ion-content>

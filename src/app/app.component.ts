@@ -42,7 +42,6 @@ export class MyApp {
   navigatePages: PageInterface[];
   adminPages: PageInterface[];
   accountPages: PageInterface[];
-  pageMap: Map<string, any> = new Map();
   menuTitle: MenuTitle = {
     header: null,
     navigate: null,
@@ -93,16 +92,6 @@ export class MyApp {
 
     this.accountPages = [];
     this.accountPages.push(signOut);
-
-    this.navigatePages.forEach(page => {
-      this.pageMap.set(page.name, page.component);
-    });
-    this.adminPages.forEach(page => {
-      this.pageMap.set(page.name, page.component);
-    });
-    this.accountPages.forEach(page => {
-      this.pageMap.set(page.name, page.component);
-    });
   }
 
   subscribeAuth() {
@@ -123,17 +112,8 @@ export class MyApp {
 
     if (updateUserResult && this._auth.isAuthenticated) {
       
-      let currentPageName: string = null;
-      let currentPageComponent: PageInterface = null;
-      await this.storage.get("currnetPageName").then(val => currentPageName = val);
-      currentPageComponent = this.pageMap.get(currentPageName);
       this.menu.enable(updateUserResult == true, 'menu');
-
-      if(currentPageComponent == null) {
-        this.rootPage = HomePage;
-      } else {
-        this.rootPage = currentPageComponent;
-      }
+      this.rootPage = HomePage;
 
       console.log("MyApp - authenticated: Sign in");
     } else if (updateUserResult && this._auth.isSignedIn) {
@@ -170,10 +150,8 @@ export class MyApp {
     // we wouldn't want the back button to show in this scenario
 
     if(page.signout){
-      this.storage.remove("currnetPageName");
       await this._auth.signOut();
     }else {
-      await this.storage.set("currnetPageName", page.name);
       this.nav.setRoot(page.component);
     }
 
