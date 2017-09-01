@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>사용자 정보</ion-title>
+  </ion-navbar>
+</ion-header>
+  
+<ion-content class="icontent" scroll=false>
+  
+  <ion-list class="ilist">
+    <ion-item class="ilist-item">
+      <ion-avatar item-start (click)="showUserPhoto(user.photoURL)">
+        <img [src]="user.photoURL ? user.photoURL : 'assets/img/google_default_photo.jpg'">
+      </ion-avatar>
+      <h2>{{user.name}}</h2>
+      <p>{{user.email}}</p>
+    </ion-item>
+    <ion-item class="ilist-item">
+      UID
+      <ion-note item-end>
+          <h5>{{user.uid}}</h5>
+      </ion-note>
+    </ion-item>
+    <ion-item class="ilist-item">
+      가입 날짜
+      <ion-note item-end>
+        {{user.createDate}}
+      </ion-note>
+    </ion-item>
+    <ion-item class="ilist-item">
+      마지막 로그인
+      <ion-note item-end>
+        {{user.lastSigninDate}}
+      </ion-note>
+    </ion-item>
+    <ion-item class="ilist-item">
+      로그인 횟수
+      <ion-note item-end>
+        {{user.signinCnt}}
+      </ion-note>
+    </ion-item>
+    <ion-item class="ilist-item">
+      인증 코드
+      <ion-note item-end>
+        {{user.verificationCode}}
+      </ion-note>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -11,21 +11,24 @@ import { environment } from '../environments/environment';
 
 import { AuthService } from '../providers/auth-service/auth-service';
 import { GlobalVar } from '../providers/global-var/global-var';
-import { VerificationService } from '../providers/verification-service/verification-service';
 import { LoadingService } from '../providers/loading-service/loading-service';
+import { VerificationService } from '../providers/verification-service/verification-service';
+import { UserService } from '../providers/user-service/user-service';
 
 import { MyApp } from './app.component';
 import { SigninPage } from './../pages/signin/signin';
 import { SignupPage } from './../pages/signup/signup';
 import { HomePage } from './../pages/home/home';
 import { TabsPage } from './../pages/tabs/tabs';
-import { Tab3Page } from './../pages/tabs/tab3/tab3';
-import { Tab2Page } from './../pages/tabs/tab2/tab2';
-import { Tab1Page } from './../pages/tabs/tab1/tab1';
+  import { Tab3Page } from './../pages/tabs/tab3/tab3';
+  import { Tab2Page } from './../pages/tabs/tab2/tab2';
+  import { Tab1Page } from './../pages/tabs/tab1/tab1';
 import { UserTabsPage } from './../pages/userTabs/userTabs';
-import { UserPage } from './../pages/userTabs/user/user';
-import { UserLogPage } from './../pages/userTabs/user-log/userLog';
-import { VerificationPage } from './../pages/userTabs/verification/verification';
+  import { UserPage } from './../pages/userTabs/user/user';
+    import { UserPhotoPage } from './../pages/userTabs/user/photo/userPhoto';
+    import { UserDetailPage } from './../pages/userTabs/user/detail/userDetail';
+  import { UserLogPage } from './../pages/userTabs/user-log/userLog';
+  import { VerificationPage } from './../pages/userTabs/verification/verification';
 
 @NgModule({
   declarations: [
@@ -34,13 +37,15 @@ import { VerificationPage } from './../pages/userTabs/verification/verification'
     SignupPage,
     HomePage,
     TabsPage,
-    Tab1Page,
-    Tab2Page,
-    Tab3Page,
+      Tab1Page,
+      Tab2Page,
+      Tab3Page,
     UserTabsPage,
-    UserPage,
-    UserLogPage,
-    VerificationPage
+      UserPage,
+        UserPhotoPage,
+        UserDetailPage,
+      UserLogPage,
+      VerificationPage
   ],
   imports: [
     BrowserModule,
@@ -57,13 +62,15 @@ import { VerificationPage } from './../pages/userTabs/verification/verification'
     SignupPage,
     HomePage,
     TabsPage,
-    Tab1Page,
-    Tab2Page,
-    Tab3Page,
+      Tab1Page,
+      Tab2Page,
+      Tab3Page,
     UserTabsPage,
-    UserPage,
-    UserLogPage,
-    VerificationPage
+      UserPage,
+        UserPhotoPage,
+        UserDetailPage,
+      UserLogPage,
+      VerificationPage
   ],
   providers: [
     StatusBar,
@@ -72,7 +79,8 @@ import { VerificationPage } from './../pages/userTabs/verification/verification'
     GlobalVar,
     AuthService,
     VerificationService,
-    LoadingService
+    LoadingService,
+    UserService
   ]
 })
 export class AppModule {}

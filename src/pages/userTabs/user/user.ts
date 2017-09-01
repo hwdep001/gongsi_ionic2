@@ -1,8 +1,14 @@
 import { Component } from '@angular/core';
-import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
+import { ModalController, NavController } from 'ionic-angular';
 import * as firebase from 'firebase';
+
 import { LoadingService } from './../../../providers/loading-service/loading-service';
+
 import { User } from './../../../model/User';
+
+import { UserPhotoPage } from './photo/userPhoto';
+import { UserDetailPage } from './detail/userDetail';
+
 
 @Component({
   selector: 'page-user',
@@ -10,16 +16,19 @@ import { User } from './../../../model/User';
 })
 export class UserPage {
 
-  userList: Array<any>;
-  loadedUserList: Array<any>;
   userRef: firebase.database.Reference;
-  
   loader: any;
 
   searchClicked: boolean = false;
+  infiniteScrollCnt: number = 2;
+
+  userList: Array<any>;
+  loadedUserList: Array<any>;
+  
 
   constructor(
-    private db: AngularFireDatabase,
+    public modalCtrl: ModalController,
+    public navCtrl: NavController,
     private _loading: LoadingService
   ) {
     this.loader = _loading.getLoader(null, null);
@@ -34,7 +43,7 @@ export class UserPage {
   }
 
   getUserList() {
-    this.userRef.orderByChild("name").on('value', userList => {
+    this.userRef.orderByChild("name").once('value', userList => {
       let users = [];
      
       userList.forEach( user => {
@@ -46,11 +55,13 @@ export class UserPage {
       this.initializeUsers();
       
       this.loader.dismiss();
-    })
+    });
   }
 
   initializeUsers(): void {
-    this.userList = this.loadedUserList;
+    this.userList = this.loadedUserList.slice(0, 10);
+
+    console.log();
   }
 
   searchUsers(ev: any) {
@@ -67,5 +78,39 @@ export class UserPage {
           || item.name.toLowerCase().indexOf(val.toLowerCase()) > -1);
       })
     }
+  }
+
+  showUserPhoto(photoURL: string) {
+    this.navCtrl.push(UserPhotoPage, {photoURL: photoURL});
+  }
+
+  showUserInfo(uid: string){
+    // let modal = this.modalCtrl.create(UserDetailPage, {uid: uid});
+    // modal.present();
+    this.navCtrl.push(UserDetailPage, {uid: uid});
+  }
+
+  deleteUser(userKey: string){
+    console.log("deleteUser: " + userKey);
+  }
+
+  doInfinite(infiniteScroll) {
+
+    if(this.userList.length == this.loadedUserList.length) {
+      infiniteScroll.complete();
+      return;
+    }
+
+    setTimeout(() => {
+      for(let i=0; i<this.infiniteScrollCnt; i++){
+        if(this.userList.length == this.loadedUserList.length){
+          break;
+        }
+  
+        this.userList.push(this.loadedUserList[this.userList.length]);
+      }
+      
+      infiniteScroll.complete();
+    }, 500);
   }
 }

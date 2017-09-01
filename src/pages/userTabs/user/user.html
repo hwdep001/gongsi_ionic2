@@ -20,23 +20,23 @@
 
 </ion-header>
   
-<ion-content class="icontent">
+<ion-content class="icontent" scroll=false>
 
-  <ion-list>
+  <ion-list class="ilist">
     <ion-item-sliding *ngFor="let user of userList">
-      <ion-item>
-        <ion-avatar item-start>
+      <ion-item class="ilist-item">
+        <ion-avatar item-start (click)="showUserPhoto(user.photoURL)" >
           <img [src]="user.photoURL ? user.photoURL : 'assets/img/google_default_photo.jpg'">
         </ion-avatar>
         <h2>{{user.name}}</h2>
         <p>{{user.email}}</p>
       </ion-item>
-      <ion-item-options side="right">
-        <button ion-button color="primary">
+      <ion-item-options side="right" class="ilist-itemoption">
+        <button ion-button color="primary" (click)="showUserInfo(user.uid)" >
           <ion-icon name="information-circle"></ion-icon>
           정보
         </button>
-        <button ion-button color="danger">
+        <button ion-button color="danger" (click)="deleteUser(user.uid)" >
           <ion-icon name="trash"></ion-icon>
           삭제
         </button>
@@ -44,4 +44,10 @@
     </ion-item-sliding>
   </ion-list>
 
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>
