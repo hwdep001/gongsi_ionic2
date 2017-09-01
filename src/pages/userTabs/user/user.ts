@@ -59,7 +59,7 @@ export class UserPage {
   }
 
   initializeUsers(): void {
-    this.userList = this.loadedUserList.slice(0, 10);
+    this.userList = this.loadedUserList;
 
     console.log();
   }
@@ -80,6 +80,15 @@ export class UserPage {
     }
   }
 
+  clearSearch(ev: any) {
+    ev.target.value = null;
+  }
+
+  cancelSearch() {
+    this.searchClicked = !this.searchClicked;
+    this.initializeUsers();
+  }
+
   showUserPhoto(photoURL: string) {
     this.navCtrl.push(UserPhotoPage, {photoURL: photoURL});
   }
@@ -94,23 +103,23 @@ export class UserPage {
     console.log("deleteUser: " + userKey);
   }
 
-  doInfinite(infiniteScroll) {
+  // doInfinite(infiniteScroll) {
 
-    if(this.userList.length == this.loadedUserList.length) {
-      infiniteScroll.complete();
-      return;
-    }
+  //   if(this.userList.length == this.loadedUserList.length) {
+  //     infiniteScroll.complete();
+  //     return;
+  //   }
 
-    setTimeout(() => {
-      for(let i=0; i<this.infiniteScrollCnt; i++){
-        if(this.userList.length == this.loadedUserList.length){
-          break;
-        }
+  //   setTimeout(() => {
+  //     for(let i=0; i<this.infiniteScrollCnt; i++){
+  //       if(this.userList.length == this.loadedUserList.length){
+  //         break;
+  //       }
   
-        this.userList.push(this.loadedUserList[this.userList.length]);
-      }
+  //       this.userList.push(this.loadedUserList[this.userList.length]);
+  //     }
       
-      infiniteScroll.complete();
-    }, 500);
-  }
+  //     infiniteScroll.complete();
+  //   }, 300);
+  // }
 }

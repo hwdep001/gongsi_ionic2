@@ -29,7 +29,7 @@ export class SignupPage {
     private _verification: VerificationService,
     private _loading: LoadingService
   ) {
-    this.loader = _loading.getLoader(null, "Please wait...");
+    this.loader = _loading.getLoader(null, "Please wait...", true);
   }
 
   ionViewDidLoad() {

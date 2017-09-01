@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <button ion-button menuToggle>
+    <button ion-button menuToggle *ngIf="!searchClicked">
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title *ngIf="!searchClicked">사용자 관리</ion-title>
@@ -10,12 +10,12 @@
       </button>
     </ion-buttons>
 
-    <ion-searchbar (ionInput)="searchUsers($event)" placeholder="Name or email" *ngIf="searchClicked"></ion-searchbar>
-    <ion-buttons end *ngIf="searchClicked" (click)="searchClicked = !searchClicked">
-        <button ion-button icon-only>
-          <ion-icon name="close"></ion-icon>
-        </button>
-      </ion-buttons>
+    <ion-buttons start style="order: 1;" *ngIf="searchClicked" (click)="cancelSearch()">
+      <button ion-button icon-only style="width: 40px; padding-left: 2px;">
+        <ion-icon name="arrow-round-back"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-searchbar end (ionInput)="searchUsers($event)" placeholder="Name or email" *ngIf="searchClicked" (click)="clearSearch($event)"></ion-searchbar>
   </ion-navbar>
 
 </ion-header>
@@ -44,10 +44,10 @@
     </ion-item-sliding>
   </ion-list>
 
-  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+  <!-- <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
     <ion-infinite-scroll-content
       loadingSpinner="bubbles"
       loadingText="Loading more data...">
     </ion-infinite-scroll-content>
-  </ion-infinite-scroll>
+  </ion-infinite-scroll> -->
 </ion-content>

@@ -1,9 +1,10 @@
 import { User } from './../../model/User';
 import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase';
 
-import { Storage } from '@ionic/storage';
+import { CommonUtil } from './../../utils/commonUtil';
 
 @Injectable()
 export class AuthService {
@@ -46,8 +47,8 @@ export class AuthService {
     return this.isSignedIn ? this.user.signinCnt : null;
   }
   
-  get verificationCode(): string {
-    return this.isSignedIn ? this.user.verificationCode : null;
+  get vCode(): any {
+    return this.isSignedIn ? this.user.vCode : null;
   }
   
   get isSignedIn(): boolean {
@@ -55,8 +56,8 @@ export class AuthService {
   }
   
   get isAuthenticated(): boolean {
-    const code = this.verificationCode
-    return (code == null || code == '-1') ? false : true;
+    const code = this.vCode
+    return (code == null || code == false) ? false : true;
   }
 
   // // // Returns
@@ -129,6 +130,7 @@ export class AuthService {
     }
 
     // 업데이트 할 tempUser 저장
+    const currentDate = CommonUtil.getCurrentDate();
     if(stepResult){
       stepResult = false;
       tempUser = {
@@ -136,18 +138,18 @@ export class AuthService {
         email: currentUser.email,
         name: currentUser.displayName,
         photoURL: currentUser.photoURL,
-        lastSigninDate: new Date()
+        lastSigninDate: currentDate
       }
   
       await firebase.database().ref(path).once('value')
       .then(snapshot => {
         if(snapshot.exists()) {
           tempUser.signinCnt = ++snapshot.val().signinCnt;
-          tempUser.verificationCode = snapshot.val().verificationCode;
+          tempUser.vCode = snapshot.val().vCode;
         } else {
-          tempUser.createDate = new Date();
+          tempUser.createDate = currentDate;
           tempUser.signinCnt = 0;
-          tempUser.verificationCode = -1;
+          tempUser.vCode = false;
         }
         stepResult = true;
       })
@@ -184,7 +186,7 @@ export class AuthService {
           this.user.createDate = snapshot.val().createDate;
           this.user.lastSigninDate = snapshot.val().lastSigninDate;
           this.user.signinCnt = snapshot.val().signinCnt;
-          this.user.verificationCode = snapshot.val().verificationCode;
+          this.user.vCode = snapshot.val().vCode;
         } else {
           this.user = null;
         }

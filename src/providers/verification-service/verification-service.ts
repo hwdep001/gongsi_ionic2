@@ -2,6 +2,8 @@ import { AuthService } from './../auth-service/auth-service';
 import { Injectable } from '@angular/core';
 import * as firebase from 'firebase';
 
+import { CommonUtil } from './../../utils/commonUtil';
+
 @Injectable()
 export class VerificationService {
 
@@ -22,7 +24,7 @@ export class VerificationService {
       if(snapshot.val() != null) {
         snapshot.forEach(sub => {
           console.log(sub);
-          if(sub.val().regDate == false) result = true;
+          if(sub.val().vDate == false) result = true;
         });
       }
 
@@ -37,10 +39,12 @@ export class VerificationService {
   async registerVerificationCode(code: string, uid: string) {
     let result: boolean = false;
 
+    const currentDate = CommonUtil.getCurrentDate();
+
     let ref = this.vBasicRef.child(code);
     await ref.update({
-      regDate: new Date(),
-      regUid: uid
+      vDate: currentDate,
+      vUid: uid
     }).then(() => {
       result = true;
     }).catch(err => {
@@ -50,13 +54,14 @@ export class VerificationService {
     if(result) {
       result = false;
       await firebase.database().ref(`users/${uid}`).update({
-        verificationCode: code
+        vCode: code,
+        vDate: currentDate
       }).then(() => {
         result = true;
       }).catch(err => {
         ref.update({
-          regDate: false,
-          regUid: false
+          vDate: false,
+          vUid: false
         })
         console.log(err);
       })
