@@ -12,6 +12,7 @@ import { environment } from '../environments/environment';
 import { AuthService } from '../providers/auth-service/auth-service';
 import { GlobalVar } from '../providers/global-var/global-var';
 import { VerificationService } from '../providers/verification-service/verification-service';
+import { LoadingService } from '../providers/loading-service/loading-service';
 
 import { MyApp } from './app.component';
 import { SigninPage } from './../pages/signin/signin';
@@ -70,7 +71,8 @@ import { VerificationPage } from './../pages/userTabs/verification/verification'
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     GlobalVar,
     AuthService,
-    VerificationService
+    VerificationService,
+    LoadingService
   ]
 })
 export class AppModule {}

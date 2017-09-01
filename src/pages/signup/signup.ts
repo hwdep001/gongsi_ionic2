@@ -3,6 +3,7 @@ import { NavController, MenuController, ToastController } from 'ionic-angular';
 
 import { AuthService } from './../../providers/auth-service/auth-service';
 import { VerificationService } from './../../providers/verification-service/verification-service';
+import { LoadingService } from './../../providers/loading-service/loading-service';
 import { CommonUtil } from './../../utils/commonUtil';
 
 import { HomePage } from './../home/home';
@@ -18,14 +19,17 @@ export class SignupPage {
   errMsg: string = "";
   errFlag: boolean = false;
 
+  loader: any;
+
   constructor(
     private navCtrl: NavController,
-    private _auth: AuthService,
     private menu: MenuController,
     private toastCtrl: ToastController,
-    private _verification: VerificationService
+    private _auth: AuthService,
+    private _verification: VerificationService,
+    private _loading: LoadingService
   ) {
-    
+    this.loader = _loading.getLoader(null, "Please wait...");
   }
 
   ionViewDidLoad() {
@@ -37,6 +41,7 @@ export class SignupPage {
   }
 
   async getAuth() {
+    this.loader.present();
     const code = this.verificationCode;
 
     if(CommonUtil.isStringEmpty(code)){
@@ -57,6 +62,7 @@ export class SignupPage {
       }
     }
     this.isSubmitClick = true;
+    this.loader.present();
   }
 
   showToast(position: string, message: string) {
@@ -67,18 +73,5 @@ export class SignupPage {
     });
 
     toast.present(toast);
-  }
-
-
-  test() {
-    let result: boolean = false;
-    
-    if(!this.isSubmitClick) {
-      return true;
-    } else if(!CommonUtil.isStringEmpty(this.verificationCode)) {
-      return true;
-    } else {
-      false;
-    }
   }
 }

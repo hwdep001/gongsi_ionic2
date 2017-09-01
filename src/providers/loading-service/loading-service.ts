@@ -1,0 +1,26 @@
+import { Injectable } from '@angular/core';
+import { LoadingController } from 'ionic-angular';
+
+@Injectable()
+export class LoadingService {
+
+  constructor(
+    private loadingCtrl: LoadingController
+  ) {
+    
+  }
+
+  getLoader(spinner: string, content: string, dismissOnPageChange?: boolean) {
+    spinner = spinner ? spinner : "bubbles";
+    content = content ? content : "Please wait...";
+    dismissOnPageChange = dismissOnPageChange == true ? true : false;
+
+    console.log("test~~~~~~~~ : " + dismissOnPageChange);
+    return this.loadingCtrl.create({
+      spinner: spinner,
+      content: content,
+      dismissOnPageChange: dismissOnPageChange
+    });
+  }
+
+}

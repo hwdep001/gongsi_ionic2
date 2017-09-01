@@ -15,7 +15,7 @@ export class AuthService {
     private afAuth: AngularFireAuth,
     private storage: Storage
   ) {
-
+    
   }
 
   get uid(): string {
@@ -28,6 +28,10 @@ export class AuthService {
 
   get name(): string {
     return this.isSignedIn ? this.user.name : null;
+  }
+
+  get photoURL(): string {
+    return this.isSignedIn ? this.user.photoURL : null;
   }
 
   get createDate(): string {
@@ -110,6 +114,7 @@ export class AuthService {
   //// Helpers ////
 
   async updateUserDB() {
+    
     let stepResult = false;
     const currentUser = this.afAuth.auth.currentUser;
     let path;
@@ -130,6 +135,7 @@ export class AuthService {
         uid: currentUser.uid,
         email: currentUser.email,
         name: currentUser.displayName,
+        photoURL: currentUser.photoURL,
         lastSigninDate: new Date()
       }
   
@@ -174,6 +180,7 @@ export class AuthService {
           this.user.uid = snapshot.val().uid;
           this.user.email = snapshot.val().email;
           this.user.name = snapshot.val().name;
+          this.user.photoURL = snapshot.val().photoURL;
           this.user.createDate = snapshot.val().createDate;
           this.user.lastSigninDate = snapshot.val().lastSigninDate;
           this.user.signinCnt = snapshot.val().signinCnt;

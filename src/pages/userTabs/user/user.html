@@ -9,10 +9,35 @@
   
 <ion-content padding>
 
-  <ion-list>
+  <!-- <ion-list>
     <ion-item class="text" *ngFor="let user of users | async">
       {{user.$key}}: {{user.uid}} - {{user.name}}
     </ion-item>
+  </ion-list> -->
+  <ion-searchbar (ionInput)="searchUsers($event)" placeholder="Name or email"></ion-searchbar>
+  <ion-list>
+    <ion-item-sliding *ngFor="let user of userList">
+      <ion-item>
+        <ion-avatar item-start>
+          <img [src]="user.photoURL ? user.photoURL : 'assets/img/google_default_photo.jpg'">
+        </ion-avatar>
+        <h2>{{user.name}}</h2>
+        <p>{{user.email}}</p>
+      </ion-item>
+      <ion-item-options side="right">
+        <button ion-button color="primary">
+          <ion-icon name="information-circle"></ion-icon>
+          정보
+        </button>
+        <button ion-button color="danger">
+          <ion-icon name="trash"></ion-icon>
+          삭제
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
 
+  <!-- <ion-fab>
+    <button ion-fab color="primary">Button</button>
+  </ion-fab> -->
 </ion-content>
