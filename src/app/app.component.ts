@@ -1,3 +1,4 @@
+import { UserPage } from './../pages/userTabs/user/user';
 import { MenuTitle, PageInterface } from './app.component';
 import { UserTabsPage } from './../pages/userTabs/userTabs';
 import { Component, ViewChild } from '@angular/core';
@@ -113,7 +114,7 @@ export class MyApp {
     if (updateUserResult && this._auth.isAuthenticated) {
       
       this.menu.enable(updateUserResult == true, 'menu');
-      this.rootPage = HomePage;
+      this.rootPage = UserPage;
 
       console.log("MyApp - authenticated: Sign in");
     } else if (updateUserResult && this._auth.isSignedIn) {

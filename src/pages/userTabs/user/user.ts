@@ -13,8 +13,10 @@ export class UserPage {
   userList: Array<any>;
   loadedUserList: Array<any>;
   userRef: firebase.database.Reference;
-
+  
   loader: any;
+
+  searchClicked: boolean = false;
 
   constructor(
     private db: AngularFireDatabase,
