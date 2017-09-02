@@ -4,7 +4,7 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title *ngIf="!searchClicked">사용자 관리</ion-title>
-    <ion-buttons end *ngIf="!searchClicked" (click)="searchClicked = !searchClicked" >
+    <ion-buttons end *ngIf="!searchClicked" (click)="searchClicked = true" >
       <button ion-button icon-only>
         <ion-icon name="search"></ion-icon>
       </button>

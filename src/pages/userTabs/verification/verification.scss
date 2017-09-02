@@ -1,3 +1,30 @@
 page-verification {
+    
+    .icontent {
+        
+        .scroll-content {
+            padding: 5px;
+        }
 
+        .ilist {
+
+            .ilist-item {
+                
+                .key-used {
+                    color: map-get($colors, secondary);
+                }
+
+                .key-unused {
+                    color: map-get($colors, danger);
+                }
+            }
+
+            .ilist-itemoption {
+
+                button {
+                    width: 70px;
+                } 
+            }
+        }
+    }
 }

@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>인증 코드 정보</ion-title>
+  </ion-navbar>
+</ion-header>
+  
+<ion-content class="icontent" scroll=false>
+  
+  <ion-list class="ilist">
+    <ion-item class="ilist-item">
+      코드
+      <ion-note item-end>
+          <h5>{{verification.key}}</h5>
+      </ion-note>
+    </ion-item>
+    <ion-item class="ilist-item">
+      생성 날짜
+      <ion-note item-end>
+        {{verification.createDate}}
+      </ion-note>
+    </ion-item>
+    <ion-item class="ilist-item">
+      인증 UID
+      <ion-note item-end>
+        {{verification.vUid}}
+      </ion-note>
+    </ion-item>
+    <ion-item class="ilist-item">
+      인증 날짜
+      <ion-note item-end>
+        {{verification.vDate}}
+      </ion-note>
+    </ion-item>
+  </ion-list>
+</ion-content>

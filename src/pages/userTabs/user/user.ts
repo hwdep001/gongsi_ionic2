@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ModalController, NavController } from 'ionic-angular';
+import { ModalController, NavController, AlertController, ToastController } from 'ionic-angular';
 import * as firebase from 'firebase';
 
 import { LoadingService } from './../../../providers/loading-service/loading-service';
@@ -17,23 +17,21 @@ import { UserDetailPage } from './detail/userDetail';
 export class UserPage {
 
   userRef: firebase.database.Reference;
-  loader: any;
-
-  searchClicked: boolean = false;
-  infiniteScrollCnt: number = 2;
-
+  
   userList: Array<any>;
   loadedUserList: Array<any>;
+
+  searchClicked: boolean = false;
+  // infiniteScrollCnt: number = 2;
   
 
   constructor(
     public modalCtrl: ModalController,
     public navCtrl: NavController,
+    public alertCtrl: AlertController,
+    private toastCtrl: ToastController,
     private _loading: LoadingService
   ) {
-    this.loader = _loading.getLoader(null, null);
-    this.loader.present();
-
     this.userRef = firebase.database().ref("/users");
     this.getUserList();
   }
@@ -42,8 +40,16 @@ export class UserPage {
     // console.log('==> ionViewDidLoad UserPage');
   }
 
+  ionViewWillUnload() {
+    // console.log('==> ionViewWillUnload UserPage');
+    this.userRef.off();
+  }
+
   getUserList() {
-    this.userRef.orderByChild("name").once('value', userList => {
+    const loader = this._loading.getLoader(null, null);
+    loader.present();
+
+    this.userRef.orderByChild("name").on('value', userList => {
       let users = [];
      
       userList.forEach( user => {
@@ -54,14 +60,12 @@ export class UserPage {
       this.loadedUserList = users;
       this.initializeUsers();
       
-      this.loader.dismiss();
+      loader.dismiss();
     });
   }
 
   initializeUsers(): void {
     this.userList = this.loadedUserList;
-
-    console.log();
   }
 
   searchUsers(ev: any) {
@@ -85,7 +89,7 @@ export class UserPage {
   }
 
   cancelSearch() {
-    this.searchClicked = !this.searchClicked;
+    this.searchClicked = false;
     this.initializeUsers();
   }
 
@@ -93,14 +97,41 @@ export class UserPage {
     this.navCtrl.push(UserPhotoPage, {photoURL: photoURL});
   }
 
-  showUserInfo(uid: string){
-    // let modal = this.modalCtrl.create(UserDetailPage, {uid: uid});
-    // modal.present();
-    this.navCtrl.push(UserDetailPage, {uid: uid});
+  showUserInfo(key: string){
+    this.navCtrl.push(UserDetailPage, {key: key});
   }
 
-  deleteUser(userKey: string){
-    console.log("deleteUser: " + userKey);
+  deleteUser(key: string){
+    let confirm = this.alertCtrl.create({
+      title: '사용자 삭제',
+      message: `사용자(${key})를 삭제하시겠습니까?`,
+      buttons: [
+        { text: 'No' },
+        {
+          text: 'Yes',
+          handler: () => {
+            const loader = this._loading.getLoader(null, null);
+            loader.present();
+            // this._verification.deleteVerificationCode(key);
+            this.showToast('top', `사용자(${key})를 삭제하였습니다.`);
+            this.cancelSearch();
+            loader.dismiss();
+          }
+        }
+      ]
+    });
+    confirm.present();
+  }
+
+
+  private showToast(position: string, message: string, duration?: number) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      position: position,
+      duration: (duration == null) ? 2500 : duration
+    });
+
+    toast.present(toast);
   }
 
   // doInfinite(infiniteScroll) {

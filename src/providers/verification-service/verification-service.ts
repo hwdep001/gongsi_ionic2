@@ -4,6 +4,8 @@ import * as firebase from 'firebase';
 
 import { CommonUtil } from './../../utils/commonUtil';
 
+import { Verification } from './../../model/Verification';
+
 @Injectable()
 export class VerificationService {
 
@@ -72,4 +74,16 @@ export class VerificationService {
     return result;
   }
 
+  async createVerificationCode() {
+    let pushRef = this.vBasicRef.push();
+    let newCode: Verification = new Verification();
+    newCode.key = pushRef.key,
+    newCode.createDate = CommonUtil.getCurrentDate()
+    
+    await pushRef.set(newCode);
+  }
+
+  async deleteVerificationCode(key: string) {
+    await this.vBasicRef.child(`${key}`).remove();
+  }
 }

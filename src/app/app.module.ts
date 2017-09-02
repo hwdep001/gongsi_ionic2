@@ -29,6 +29,7 @@ import { UserTabsPage } from './../pages/userTabs/userTabs';
     import { UserDetailPage } from './../pages/userTabs/user/detail/userDetail';
   import { UserLogPage } from './../pages/userTabs/user-log/userLog';
   import { VerificationPage } from './../pages/userTabs/verification/verification';
+    import { VerificationDetailPage } from './../pages/userTabs/verification/detail/verificationDetail';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { UserTabsPage } from './../pages/userTabs/userTabs';
         UserPhotoPage,
         UserDetailPage,
       UserLogPage,
-      VerificationPage
+      VerificationPage,
+        VerificationDetailPage
   ],
   imports: [
     BrowserModule,
@@ -70,7 +72,8 @@ import { UserTabsPage } from './../pages/userTabs/userTabs';
         UserPhotoPage,
         UserDetailPage,
       UserLogPage,
-      VerificationPage
+      VerificationPage,
+        VerificationDetailPage
   ],
   providers: [
     StatusBar,
