@@ -1,81 +1,29 @@
-import { AuthService } from './../auth-service/auth-service';
 import { Injectable } from '@angular/core';
 import * as firebase from 'firebase';
 
 import { CommonUtil } from './../../utils/commonUtil';
+import { UserService } from './../user-service/user-service';
+import { AuthService } from './../auth-service/auth-service';
 
 import { Verification } from './../../model/Verification';
 
 @Injectable()
 export class VerificationService {
 
-  vBasicRef = firebase.database().ref('verificationCodes');
+  vRef: firebase.database.Reference;
 
   constructor(
+    private _user: UserService,
     private _auth: AuthService
   ) {
-    
+    this.vRef = firebase.database().ref('/verifications');
   }
 
-  async isUsableVerificationCode(code: string) {
-    let result: boolean = false;
-
-    await this.vBasicRef.orderByKey().equalTo(code).once('value')
-    .then(snapshot => {
-
-      if(snapshot.val() != null) {
-        snapshot.forEach(sub => {
-          console.log(sub);
-          if(sub.val().vDate == false) result = true;
-        });
-      }
-
-    })
-    .catch(err => {
-      console.log(err);
-    });
-
-    return result;
-  }
-
-  async registerVerificationCode(code: string, uid: string) {
-    let result: boolean = false;
-
-    const currentDate = CommonUtil.getCurrentDate();
-
-    let ref = this.vBasicRef.child(code);
-    await ref.update({
-      vDate: currentDate,
-      vUid: uid
-    }).then(() => {
-      result = true;
-    }).catch(err => {
-      console.log(err);
-    });
-
-    if(result) {
-      result = false;
-      await firebase.database().ref(`users/${uid}`).update({
-        vCode: code,
-        vDate: currentDate
-      }).then(() => {
-        result = true;
-      }).catch(err => {
-        ref.update({
-          vDate: false,
-          vUid: false
-        })
-        console.log(err);
-      })
-    }
-
-    await this._auth.updateUserDB();
-    
-    return result;
-  }
-
+  /**
+   * Create verification.
+   */
   async createVerificationCode() {
-    let pushRef = this.vBasicRef.push();
+    let pushRef = this.vRef.push();
     let newCode: Verification = new Verification();
     newCode.key = pushRef.key,
     newCode.createDate = CommonUtil.getCurrentDate()
@@ -83,7 +31,76 @@ export class VerificationService {
     await pushRef.set(newCode);
   }
 
+
+  /**
+   * Read verification.
+   * @param key 
+   */
+  async getVerification(key: string) {
+    let result: Verification;
+    
+    await this.vRef.child(`${key}`).once('value', snapshot => {
+      result = snapshot.val();
+    });
+
+    return result;
+  }
+
+
+  /**
+   * Update verification.
+   * @param verification 
+   */
+  async updateVerification(verification: Verification) {
+    let result: boolean = false;
+    
+    await this.vRef.child(`${verification.key}`).update(verification)
+    .then( () => result = true)
+    .catch(err => console.log(err));
+
+    return result;
+  }
+
+
+  /**
+   * Delete verification.
+   * @param key 
+   */
   async deleteVerificationCode(key: string) {
-    await this.vBasicRef.child(`${key}`).remove();
+    await this.vRef.child(`${key}`).remove();
+  }
+
+
+  /**
+   * Register verification code.
+   * @param uid 
+   * @param key 
+   */
+  async registerVerification(uid: string, key: string) {
+    let result: boolean = false;
+
+    let verification: Verification = {
+      key: key,
+      vUid: uid,
+      vDate: CommonUtil.getCurrentDate()
+    }
+
+    await this.updateVerification(verification)
+    .then( () => result = true)
+    .catch(err => console.log(err));
+
+    if(result) {
+      result = false;
+
+      await this._user.signupUser(verification)
+      .then( () => result = true)
+      .catch(err => console.log(err));
+    }
+
+    if(result){
+      await this._auth.setUser();
+    }
+
+    return result;
   }
 }

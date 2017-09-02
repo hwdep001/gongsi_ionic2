@@ -4,8 +4,6 @@ import * as firebase from 'firebase';
 
 import { LoadingService } from './../../../providers/loading-service/loading-service';
 
-import { User } from './../../../model/User';
-
 import { UserPhotoPage } from './photo/userPhoto';
 import { UserDetailPage } from './detail/userDetail';
 

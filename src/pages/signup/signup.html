@@ -16,7 +16,7 @@
     </p>
 
     <ion-item>
-      <button ion-button block (click)="getAuth()">Get auth</button>
+      <button ion-button block (click)="getAuth(verificationCode)">Get auth</button>
       <button ion-button block color="danger" (click)="clickSignOutBtn()" >Sign out</button>
     </ion-item>
   </ion-list>
@@ -25,12 +25,20 @@
   <br>
   <ion-list>
       <ion-item>
-        <div>is signed in? : {{_auth.isSignedIn}}</div>
-        <div>id : {{_auth.uid}}</div>
+        <div>uid : {{_auth.uid}}</div>
+        <div>email : {{_auth.email}}</div>
         <div>name : {{_auth.name}}</div>
-        <div>display name: {{_auth.currentUserDisplayName}}</div>
+        <div>photoURL : {{_auth.photoURL}}</div>
+        <div>createDate : {{_auth.createDate}}</div>
+        <div>lastSigninDate : {{_auth.lastSigninDate}}</div>
+        <div>signinCnt : {{_auth.signinCnt}}</div>
+        <div>vKey : {{_auth.vKey}}</div>
+        <div>vDate : {{_auth.vDate}}</div>
         <br>
+        <div>is signed in? : {{_auth.isSignedIn}}</div>
         <div>is authenticated : {{_auth.isAuthenticated}}</div>
+        <br>
+        <div>display name: {{_auth.currentUserDisplayName}}</div>
       </ion-item>
   </ion-list>
 

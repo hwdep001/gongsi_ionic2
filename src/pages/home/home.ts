@@ -13,9 +13,8 @@ export class HomePage {
     public navCtrl: NavController,
     private _auth: AuthService
   ) {
-
   }
-
+  
   ionViewDidLoad() {
     // console.log('==> ionViewDidLoad HomePage');
   }

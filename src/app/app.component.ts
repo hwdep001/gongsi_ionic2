@@ -1,6 +1,3 @@
-import { UserPage } from './../pages/userTabs/user/user';
-import { MenuTitle, PageInterface } from './app.component';
-import { UserTabsPage } from './../pages/userTabs/userTabs';
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, MenuController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -9,29 +6,16 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { Storage } from '@ionic/storage';
 
 import { AuthService } from './../providers/auth-service/auth-service';
+import { LoadingService } from './../providers/loading-service/loading-service';
+
+import { MenuTitleInterface } from './../model/MenuTitleInterface';
+import { PageInterface } from './../model/PageInterface';
 
 import { SigninPage } from './../pages/signin/signin';
 import { SignupPage } from './../pages/signup/signup';
 import { HomePage } from './../pages/home/home';
 import { TabsPage } from './../pages/tabs/tabs';
-
-export interface PageInterface {
-  title: string;
-  name?: string;
-  component: any;
-  icon: string;
-  signout?: boolean;
-  index?: number;
-  tabName?: string;
-  tabComponent?: any;
-}
-
-export interface MenuTitle {
-  header: string;
-  navigate: string;
-  admin: string;
-  account: string;
-}
+import { UserTabsPage } from './../pages/userTabs/userTabs';
 
 @Component({
   templateUrl: 'app.html'
@@ -43,14 +27,13 @@ export class MyApp {
   navigatePages: PageInterface[];
   adminPages: PageInterface[];
   accountPages: PageInterface[];
-  menuTitle: MenuTitle = {
+  menuTitle: MenuTitleInterface = {
     header: null,
     navigate: null,
     admin: null,
     account: null
   }
 
-  
   constructor(
     private platform: Platform,
     private statusBar: StatusBar, 
@@ -58,7 +41,8 @@ export class MyApp {
     private menu: MenuController,
     private storage: Storage,
     private afAuth: AngularFireAuth,
-    private _auth: AuthService
+    private _auth: AuthService,
+    private _loading: LoadingService
   ) {
     console.log("MyApp - =======================");
     console.log("MyApp - Create a component.");
@@ -102,6 +86,9 @@ export class MyApp {
   }
   
   async initializeMenu(auth) {
+    let loading = this._loading.getLoader(null, null, true);
+    loading.present();
+
     this.menu.enable(false, 'menu');
     this.menuTitle.header = "Menu";
     this.menuTitle.navigate = "Navigate";
@@ -109,12 +96,12 @@ export class MyApp {
     this.menuTitle.account = "Account";
     this.setPages();
 
-    const updateUserResult = await this._auth.updateUserDB();
+    const updateUserResult = await this._auth.signinProcess();
 
     if (updateUserResult && this._auth.isAuthenticated) {
       
       this.menu.enable(updateUserResult == true, 'menu');
-      this.rootPage = UserPage;
+      this.rootPage = HomePage;
 
       console.log("MyApp - authenticated: Sign in");
     } else if (updateUserResult && this._auth.isSignedIn) {
@@ -124,6 +111,8 @@ export class MyApp {
       this.rootPage = SigninPage;
       console.log("MyApp - authenticated: Sign out");
     }
+
+    loading.dismiss();
   }
 
   async savePlatform() {

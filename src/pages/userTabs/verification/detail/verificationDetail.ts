@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavParams, NavController } from 'ionic-angular';
+import { NavParams } from 'ionic-angular';
 import * as firebase from 'firebase';
 
 import { LoadingService } from './../../../../providers/loading-service/loading-service';
@@ -18,11 +18,10 @@ export class VerificationDetailPage {
 
   constructor(
     private param: NavParams,
-    private navCtrl: NavController,
     private _loading: LoadingService
   ) {
     this.key = this.param.get('key');
-    this.vRef = firebase.database().ref(`/verificationCodes/${this.key}`);
+    this.vRef = firebase.database().ref(`/verifications/${this.key}`);
 
     this.getVerification();
   }

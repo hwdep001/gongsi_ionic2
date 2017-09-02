@@ -1,3 +1,4 @@
+import { UserService } from './../user-service/user-service';
 import { User } from './../../model/User';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
@@ -14,7 +15,8 @@ export class AuthService {
 
   constructor(
     private afAuth: AngularFireAuth,
-    private storage: Storage
+    private storage: Storage,
+    private _user: UserService
   ) {
     
   }
@@ -47,8 +49,13 @@ export class AuthService {
     return this.isSignedIn ? this.user.signinCnt : null;
   }
   
-  get vCode(): any {
-    return this.isSignedIn ? this.user.vCode : null;
+  get vKey(): any {
+    // if(this.isSignedIn && this.user.vCode != undefined)
+    return this.isSignedIn ? this.user.vKey : null;
+  }
+
+  get vDate(): any {
+    return this.isSignedIn ? this.user.vDate : null;
   }
   
   get isSignedIn(): boolean {
@@ -56,8 +63,8 @@ export class AuthService {
   }
   
   get isAuthenticated(): boolean {
-    const code = this.vCode
-    return (code == null || code == false) ? false : true;
+    const key = this.vKey
+    return (key == null || key == false) ? false : true;
   }
 
   // // // Returns
@@ -114,91 +121,49 @@ export class AuthService {
 
   //// Helpers ////
 
-  async updateUserDB() {
-    
-    let stepResult = false;
-    const currentUser = this.afAuth.auth.currentUser;
-    let path;
-    let tempUser: CustomObject;
-    
-    // 로그인 유저 확인
-    if(this.afAuth.auth.currentUser == null) {
-      this.user = null;
-    } else {
-      path = `users/${currentUser.uid}`;
-      stepResult = true;
-    }
-
-    // 업데이트 할 tempUser 저장
+  /**
+   * 로그인 처리
+   */
+  async signinProcess() {
+    let result:boolean = false;
     const currentDate = CommonUtil.getCurrentDate();
-    if(stepResult){
-      stepResult = false;
-      tempUser = {
-        uid: currentUser.uid,
-        email: currentUser.email,
-        name: currentUser.displayName,
-        photoURL: currentUser.photoURL,
-        lastSigninDate: currentDate
-      }
-  
-      await firebase.database().ref(path).once('value')
-      .then(snapshot => {
-        if(snapshot.exists()) {
-          tempUser.signinCnt = ++snapshot.val().signinCnt;
-          tempUser.vCode = snapshot.val().vCode;
-        } else {
-          tempUser.createDate = currentDate;
-          tempUser.signinCnt = 0;
-          tempUser.vCode = false;
-        }
-        stepResult = true;
-      })
-      .catch(err => {
-        console.log(err);
-        stepResult = false;
-      });
-    }
-
-    // tempUser db에 업데이트
-    if(stepResult){
-      stepResult = false;
-      await firebase.database().ref(path).update(tempUser)
-      .then(() => {
-        stepResult = true;
-      })
-      .catch(err => {
-        console.log(err);
-        stepResult = false;
-      })
-    }
-
-    // user 조회하여 변수에 저장
-    if(stepResult){
-      stepResult = false;
-      await firebase.database().ref(path).once('value')
-      .then(snapshot => {
-        if(snapshot.exists()) {
-          this.user = new User();
-          this.user.uid = snapshot.val().uid;
-          this.user.email = snapshot.val().email;
-          this.user.name = snapshot.val().name;
-          this.user.photoURL = snapshot.val().photoURL;
-          this.user.createDate = snapshot.val().createDate;
-          this.user.lastSigninDate = snapshot.val().lastSigninDate;
-          this.user.signinCnt = snapshot.val().signinCnt;
-          this.user.vCode = snapshot.val().vCode;
-        } else {
-          this.user = null;
-        }
-        stepResult = true;
-      })
-      .catch(err => {
-        console.log(err);
-        stepResult = false;
-      });
-    }
+    const currentUser = this.afAuth.auth.currentUser;
     
-    return new Promise((resolve, reject) => resolve(stepResult));
+    if(currentUser == null){
+      this.user = null;
+      return result;
+    }
+
+    // user 조회
+    let user: any = await this._user.getUser(currentUser.uid);
+
+    if(user == null) {
+      // sign up
+      user = new User();
+      user.createDate = currentDate;
+      user.signinCnt = 0;
+    } else {
+      // sign in
+      user.signinCnt += 1;
+    }
+    // sign up && sign in
+    user.uid = currentUser.uid;
+    user.email = currentUser.email;
+    user.name = currentUser.displayName;
+    user.photoURL = currentUser.photoURL;
+    user.lastSigninDate = currentDate;
+
+    // user save
+    if(await this._user.saveUser(user)) {
+      await this.setUser();
+      result = true;
+    }
+
+    return result;
+  }
+
+  async setUser() {
+    this.user = await this._user.getUser(this.afAuth.auth.currentUser.uid);
   }
 
 }

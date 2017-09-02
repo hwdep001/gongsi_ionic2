@@ -27,7 +27,7 @@ export class VerificationPage {
     private _loading: LoadingService,
     private _verification: VerificationService
   ) {
-    this.vRef = firebase.database().ref("/verificationCodes");
+    this.vRef = firebase.database().ref("/verifications");
     this.getVList();
   }
 
