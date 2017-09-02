@@ -72,8 +72,10 @@ export class MyApp {
     this.navigatePages.push(homePage);
     this.navigatePages.push(tabsPage);
 
-    this.adminPages = [];
-    this.adminPages.push(userTabsPage);
+    if(this._auth.min) {
+      this.adminPages = [];
+      this.adminPages.push(userTabsPage);
+    }
 
     this.accountPages = [];
     this.accountPages.push(signOut);
@@ -81,13 +83,15 @@ export class MyApp {
 
   subscribeAuth() {
     this.afAuth.authState.subscribe((auth) => {
-      this.initializeMenu(auth);
+      this.initializeMenu();
     });
   }
   
-  async initializeMenu(auth) {
+  async initializeMenu() {
     let loading = this._loading.getLoader(null, null, true);
     loading.present();
+
+    const updateUserResult = await this._auth.signinProcess();
 
     this.menu.enable(false, 'menu');
     this.menuTitle.header = "Menu";
@@ -95,8 +99,6 @@ export class MyApp {
     this.menuTitle.admin = "Admin";
     this.menuTitle.account = "Account";
     this.setPages();
-
-    const updateUserResult = await this._auth.signinProcess();
 
     if (updateUserResult && this._auth.isAuthenticated) {
       

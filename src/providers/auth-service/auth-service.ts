@@ -50,7 +50,6 @@ export class AuthService {
   }
   
   get vKey(): any {
-    // if(this.isSignedIn && this.user.vCode != undefined)
     return this.isSignedIn ? this.user.vKey : null;
   }
 
@@ -65,6 +64,10 @@ export class AuthService {
   get isAuthenticated(): boolean {
     const key = this.vKey
     return (key == null || key == false) ? false : true;
+  }
+
+  get min(): boolean {
+    return this.isSignedIn ? this.user.ad : false;
   }
 
   // // // Returns

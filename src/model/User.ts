@@ -22,6 +22,7 @@ export class User implements UserInterface {
     signinCnt?: number;
     vKey?: any;
     vDate?: any;
+    ad?: boolean;
 
     constructor(){
 
