@@ -4,8 +4,10 @@ import * as firebase from 'firebase';
 import { CommonUtil } from './../../utils/commonUtil';
 import { UserService } from './../user-service/user-service';
 import { AuthService } from './../auth-service/auth-service';
+import { LogUserService } from './../log-user-service/log-user-service';
 
 import { Verification } from './../../model/Verification';
+import { LogUser } from './../../model/LogUser';
 
 @Injectable()
 export class VerificationService {
@@ -14,7 +16,8 @@ export class VerificationService {
 
   constructor(
     private _user: UserService,
-    private _auth: AuthService
+    private _auth: AuthService,
+    private _logUser: LogUserService
   ) {
     this.vRef = firebase.database().ref('/verifications');
   }
@@ -78,17 +81,26 @@ export class VerificationService {
    */
   async registerVerification(uid: string, key: string) {
     let result: boolean = false;
+    let returnVal: string = "fail";
+    const currentDate = CommonUtil.getCurrentDate();
 
-    let verification: Verification = {
-      key: key,
-      vUid: uid,
-      vDate: CommonUtil.getCurrentDate()
+    // verification 조회
+    let verification: any = await this.getVerification(key);
+
+    // 존재하는지 사용가능한지 확인
+    if(verification != null && verification.vUid == null) {
+      verification.vUid = uid;
+      verification.vDate = currentDate;
+
+      // verification 업데이트
+      await this.updateVerification(verification)
+      .then( () => result = true)
+      .catch(err => console.log(err));
+    } else {
+      returnVal = "unusable";
     }
 
-    await this.updateVerification(verification)
-    .then( () => result = true)
-    .catch(err => console.log(err));
-
+    // user 업데이트
     if(result) {
       result = false;
 
@@ -97,10 +109,23 @@ export class VerificationService {
       .catch(err => console.log(err));
     }
 
+    let logUser: LogUser = {
+      createDate: currentDate,
+      type: "vs",
+      uid: uid,
+      vKey: key
+    }
+    
+    // auth 서비스에 유저 정보 set
     if(result){
-      await this._auth.setUser();
+      await this._auth.setUser().then( () => returnVal = "suc");
+    } else {
+      logUser.type = "vf"
     }
 
-    return result;
+    // log 추가
+    this._logUser.createLogUser(logUser);
+
+    return returnVal;
   }
 }

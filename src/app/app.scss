@@ -19,3 +19,30 @@
     min-width: 220px;
     max-width: 15%;
 }
+
+// side menu background color
+ion-menu{
+    .fixed-content {
+        background-color: white;    
+    }
+    .scroll-content {
+        background-color: white;
+
+        ion-list-header {
+            background-color: white;
+        }
+
+        button {
+            background-color: white;
+        }
+    }
+
+}
+
+// 
+ion-nav {
+    .fixed-content{
+        // background-color: map-get($colors, content-bg);
+        background-color: white;
+    }
+}

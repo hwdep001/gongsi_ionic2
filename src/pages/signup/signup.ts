@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
-import { NavController, MenuController, ToastController, AlertController } from 'ionic-angular';
+import { MenuController, ToastController, AlertController } from 'ionic-angular';
 
 import { AuthService } from './../../providers/auth-service/auth-service';
 import { VerificationService } from './../../providers/verification-service/verification-service';
 import { LoadingService } from './../../providers/loading-service/loading-service';
 import { CommonUtil } from './../../utils/commonUtil';
-
-import { HomePage } from './../home/home';
 
 @Component({
   selector: 'page-signup',
@@ -20,7 +18,6 @@ export class SignupPage {
   errFlag: boolean = false;
 
   constructor(
-    private navCtrl: NavController,
     private menu: MenuController,
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
@@ -49,27 +46,14 @@ export class SignupPage {
       errCode = "empty";
 
     }else {
-      // verification 조회
-      let verification: any = await this._verification.getVerification(code);
-
-      if(verification != null && verification.vUid == null) {
-
-        // 인증 처리
-        if(await this._verification.registerVerification(this._auth.uid, code)) {
-          this.showToast('top', "Verification success!");
-          this.menu.enable(true, 'menu');
-          this.navCtrl.setRoot(HomePage);
-
-        } else {
-          this.showUpdateFailAlert();
-        }
-        
-      } else{
-        errCode = "unusable";
-      }
+      errCode = await this._verification.registerVerification(this._auth.uid, code);
     }
 
     switch(errCode) {
+    case "suc":
+      this.showToast('top', "Verification success!");
+      this.menu.enable(true, 'menu');
+      window.location.reload();
     case "empty":
       this.errFlag = true;
       this.errMsg = "인증 코드를 입력해 주십시오.";
@@ -79,6 +63,8 @@ export class SignupPage {
       this.errMsg = "사용할 수 없는 인증 코드 입니다.";
       this.showToast('top', "This is an unusable authentication code.");
       break;
+    case "fail":
+      this.showUpdateFailAlert();
     }
 
     this.isSubmitClick = true;

@@ -1,15 +1,18 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, MenuController } from 'ionic-angular';
+import { App, Nav, Platform, MenuController, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Storage } from '@ionic/storage';
 
+import { CommonUtil } from './../utils/commonUtil';
 import { AuthService } from './../providers/auth-service/auth-service';
 import { LoadingService } from './../providers/loading-service/loading-service';
+import { LogUserService } from './../providers/log-user-service/log-user-service';
 
 import { MenuTitleInterface } from './../model/MenuTitleInterface';
 import { PageInterface } from './../model/PageInterface';
+import { LogUser } from './../model/LogUser';
 
 import { SigninPage } from './../pages/signin/signin';
 import { SignupPage } from './../pages/signup/signup';
@@ -23,6 +26,7 @@ import { UserTabsPage } from './../pages/userTabs/userTabs';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
+  lastBack: any;
   rootPage: any;
   navigatePages: PageInterface[];
   adminPages: PageInterface[];
@@ -38,11 +42,14 @@ export class MyApp {
     private platform: Platform,
     private statusBar: StatusBar, 
     private splashScreen: SplashScreen,
+    private app: App,
     private menu: MenuController,
+    private alertCtrl: AlertController,
     private storage: Storage,
     private afAuth: AngularFireAuth,
     private _auth: AuthService,
-    private _loading: LoadingService
+    private _loading: LoadingService,
+    private _logUser: LogUserService
   ) {
     console.log("MyApp - =======================");
     console.log("MyApp - Create a component.");
@@ -58,8 +65,46 @@ export class MyApp {
       console.log("MyApp - Platform ready.");
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      this.platform.registerBackButtonAction(() => this.exitApp());
       this.savePlatform();
     });
+  }
+
+  private exitApp() {
+    let confirm = this.alertCtrl.create({
+      message: '종료하시겠습니까?',
+      buttons: [
+        { text: 'No' },
+        {
+          text: 'Yes',
+          handler: () => {
+            if(this._auth.isAuthenticated){
+              const logUser: LogUser = {
+                createDate: CommonUtil.getCurrentDate(),
+                type: "ex",
+                uid: this._auth.uid
+              }
+              this._logUser.createLogUser(logUser);
+            }
+            this.platform.exitApp();
+          }
+        }
+      ]
+    });
+    
+    const overlay = this.app._appRoot._overlayPortal.getActive();
+    const nav = this.app.getActiveNavs()[0];
+
+    if(this.menu.isOpen()) {
+      this.menu.close();
+    }else if(overlay && overlay.dismiss) {
+      overlay.dismiss();
+    } else if(nav.canGoBack()){
+      nav.pop();
+    } else if(Date.now() - this.lastBack < 500) {
+      confirm.present();
+    }
+    this.lastBack = Date.now();
   }
 
   private setPages(): void {

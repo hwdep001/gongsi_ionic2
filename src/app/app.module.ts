@@ -14,6 +14,7 @@ import { GlobalVar } from '../providers/global-var/global-var';
 import { LoadingService } from '../providers/loading-service/loading-service';
 import { VerificationService } from '../providers/verification-service/verification-service';
 import { UserService } from '../providers/user-service/user-service';
+import { LogUserService } from '../providers/log-user-service/log-user-service';
 
 import { MyApp } from './app.component';
 import { SigninPage } from './../pages/signin/signin';
@@ -83,7 +84,8 @@ import { UserTabsPage } from './../pages/userTabs/userTabs';
     AuthService,
     VerificationService,
     LoadingService,
-    UserService
+    UserService,
+    LogUserService
   ]
 })
 export class AppModule {}

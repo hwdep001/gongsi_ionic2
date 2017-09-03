@@ -6,6 +6,9 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase';
 
 import { CommonUtil } from './../../utils/commonUtil';
+import { LogUserService } from './../log-user-service/log-user-service';
+
+import { LogUser } from './../../model/LogUser';
 
 @Injectable()
 export class AuthService {
@@ -16,7 +19,8 @@ export class AuthService {
   constructor(
     private afAuth: AngularFireAuth,
     private storage: Storage,
-    private _user: UserService
+    private _user: UserService,
+    private _logUser: LogUserService
   ) {
     
   }
@@ -118,6 +122,14 @@ export class AuthService {
   //// Sign Out ////
 
   signOut() {
+    if(this.isAuthenticated){
+      const logUser: LogUser = {
+        createDate: CommonUtil.getCurrentDate(),
+        type: "so",
+        uid: this.uid
+      }
+      this._logUser.createLogUser(logUser);
+    }
     return this.afAuth.auth.signOut();
   }
 
@@ -139,8 +151,9 @@ export class AuthService {
 
     // user 조회
     let user: any = await this._user.getUser(currentUser.uid);
+    const user_copy = user;
 
-    if(user == null) {
+    if(user == null || user.vKey == null) {
       // sign up
       user = new User();
       user.createDate = currentDate;
@@ -162,6 +175,20 @@ export class AuthService {
       result = true;
     }
 
+    // create logUser
+    let logUser: LogUser = {
+      createDate: user.lastSigninDate,
+      type: "su",
+      uid: user.uid
+    }
+    if(user_copy == null) {
+      this._logUser.createLogUser(logUser);
+    } else if(user_copy.vKey !=null) {
+      logUser.type = "si";
+      logUser.cnt = user.signinCnt;
+      this._logUser.createLogUser(logUser);
+    }
+    
     return result;
   }
 

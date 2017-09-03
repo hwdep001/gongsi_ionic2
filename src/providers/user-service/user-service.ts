@@ -1,7 +1,8 @@
-import { Verification } from './../../model/Verification';
-import { User } from './../../model/User';
 import { Injectable } from '@angular/core';
 import * as firebase from 'firebase';
+
+import { Verification } from './../../model/Verification';
+import { User } from './../../model/User';
 
 @Injectable()
 export class UserService {
