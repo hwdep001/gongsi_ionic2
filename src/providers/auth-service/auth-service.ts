@@ -1,14 +1,14 @@
-import { UserService } from './../user-service/user-service';
-import { User } from './../../model/User';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase';
 
 import { CommonUtil } from './../../utils/commonUtil';
-import { LogUserService } from './../log-user-service/log-user-service';
+import { UserService } from './../user-service/user-service';
+import { UserLogService } from './../userLog-service/userLog-service';
 
-import { LogUser } from './../../model/LogUser';
+import { User } from './../../model/User';
+import { UserLog } from './../../model/UserLog';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +20,7 @@ export class AuthService {
     private afAuth: AngularFireAuth,
     private storage: Storage,
     private _user: UserService,
-    private _logUser: LogUserService
+    private _userLog: UserLogService
   ) {
     
   }
@@ -123,12 +123,12 @@ export class AuthService {
 
   signOut() {
     if(this.isAuthenticated){
-      const logUser: LogUser = {
+      const userLog: UserLog = {
         createDate: CommonUtil.getCurrentDate(),
         type: "so",
         uid: this.uid
       }
-      this._logUser.createLogUser(logUser);
+      this._userLog.createUserLog(userLog);
     }
     return this.afAuth.auth.signOut();
   }
@@ -175,18 +175,18 @@ export class AuthService {
       result = true;
     }
 
-    // create logUser
-    let logUser: LogUser = {
+    // create userLog
+    let userLog: UserLog = {
       createDate: user.lastSigninDate,
       type: "su",
       uid: user.uid
     }
     if(user_copy == null) {
-      this._logUser.createLogUser(logUser);
+      this._userLog.createUserLog(userLog);
     } else if(user_copy.vKey !=null) {
-      logUser.type = "si";
-      logUser.cnt = user.signinCnt;
-      this._logUser.createLogUser(logUser);
+      userLog.type = "si";
+      userLog.cnt = user.signinCnt;
+      this._userLog.createUserLog(userLog);
     }
     
     return result;

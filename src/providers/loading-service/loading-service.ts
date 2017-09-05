@@ -18,7 +18,8 @@ export class LoadingService {
     return this.loadingCtrl.create({
       spinner: spinner,
       content: content,
-      dismissOnPageChange: dismissOnPageChange
+      dismissOnPageChange: dismissOnPageChange,
+      duration: 5000
     });
   }
 

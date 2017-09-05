@@ -11,8 +11,6 @@ export class HomePage {
   constructor(
     private _auth: AuthService
   ) {
-
-    
   }
   
   ionViewDidLoad() {

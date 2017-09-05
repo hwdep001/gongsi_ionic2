@@ -7,6 +7,13 @@
   </ion-navbar>
 </ion-header>
   
-<ion-content class="icontent" padding>
+<ion-content #content class="icontent">
+
+  <ion-list no-lines style="margin-bottom: 110px !important;">
+    <ion-item *ngFor="let log of logList">
+        <!-- <chat-bubble>{{log.createDate}} : {{log.type}} : {{log.uid}}</chat-bubble> -->
+        {{log.createDate}} : {{log.type}} : {{log.uid}}
+    </ion-item>
+  </ion-list>
   
 </ion-content>

@@ -1,3 +1,4 @@
+import { UserLogPage } from './../pages/userTabs/user-log/userLog';
 import { Component, ViewChild } from '@angular/core';
 import { App, Nav, Platform, MenuController, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -8,11 +9,11 @@ import { Storage } from '@ionic/storage';
 import { CommonUtil } from './../utils/commonUtil';
 import { AuthService } from './../providers/auth-service/auth-service';
 import { LoadingService } from './../providers/loading-service/loading-service';
-import { LogUserService } from './../providers/log-user-service/log-user-service';
+import { UserLogService } from './../providers/userLog-service/userLog-service';
 
 import { MenuTitleInterface } from './../model/MenuTitleInterface';
 import { PageInterface } from './../model/PageInterface';
-import { LogUser } from './../model/LogUser';
+import { UserLog } from './../model/UserLog';
 
 import { SigninPage } from './../pages/signin/signin';
 import { SignupPage } from './../pages/signup/signup';
@@ -49,7 +50,7 @@ export class MyApp {
     private afAuth: AngularFireAuth,
     private _auth: AuthService,
     private _loading: LoadingService,
-    private _logUser: LogUserService
+    private _userLog: UserLogService
   ) {
     console.log("MyApp - =======================");
     console.log("MyApp - Create a component.");
@@ -79,12 +80,12 @@ export class MyApp {
           text: 'Yes',
           handler: () => {
             if(this._auth.isAuthenticated){
-              const logUser: LogUser = {
+              const userLog: UserLog = {
                 createDate: CommonUtil.getCurrentDate(),
                 type: "ex",
                 uid: this._auth.uid
               }
-              this._logUser.createLogUser(logUser);
+              this._userLog.createUserLog(userLog);
             }
             this.platform.exitApp();
           }
@@ -148,7 +149,7 @@ export class MyApp {
     if (updateUserResult && this._auth.isAuthenticated) {
       
       this.menu.enable(updateUserResult == true, 'menu');
-      this.rootPage = HomePage;
+      this.rootPage = UserLogPage;
 
       console.log("MyApp - authenticated: Sign in");
     } else if (updateUserResult && this._auth.isSignedIn) {

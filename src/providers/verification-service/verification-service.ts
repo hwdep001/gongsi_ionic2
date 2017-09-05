@@ -4,10 +4,10 @@ import * as firebase from 'firebase';
 import { CommonUtil } from './../../utils/commonUtil';
 import { UserService } from './../user-service/user-service';
 import { AuthService } from './../auth-service/auth-service';
-import { LogUserService } from './../log-user-service/log-user-service';
+import { UserLogService } from './../userLog-service/userLog-service';
 
 import { Verification } from './../../model/Verification';
-import { LogUser } from './../../model/LogUser';
+import { UserLog } from './../../model/UserLog';
 
 @Injectable()
 export class VerificationService {
@@ -17,7 +17,7 @@ export class VerificationService {
   constructor(
     private _user: UserService,
     private _auth: AuthService,
-    private _logUser: LogUserService
+    private _userLog: UserLogService
   ) {
     this.vRef = firebase.database().ref('/verifications');
   }
@@ -109,7 +109,7 @@ export class VerificationService {
       .catch(err => console.log(err));
     }
 
-    let logUser: LogUser = {
+    let userLog: UserLog = {
       createDate: currentDate,
       type: "vs",
       uid: uid,
@@ -120,11 +120,11 @@ export class VerificationService {
     if(result){
       await this._auth.setUser().then( () => returnVal = "suc");
     } else {
-      logUser.type = "vf"
+      userLog.type = "vf"
     }
 
     // log 추가
-    this._logUser.createLogUser(logUser);
+    this._userLog.createUserLog(userLog);
 
     return returnVal;
   }

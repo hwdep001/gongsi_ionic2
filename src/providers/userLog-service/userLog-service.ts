@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import * as firebase from 'firebase';
 
-import { LogUser } from './../../model/LogUser';
+import { UserLog } from './../../model/UserLog';
 
 @Injectable()
-export class LogUserService {
+export class UserLogService {
 
   logRef: firebase.database.Reference;
 
@@ -13,8 +13,8 @@ export class LogUserService {
     this.logRef = firebase.database().ref("/logs/user");
   }
 
-  createLogUser(logUser: LogUser) {
-    this.logRef.push(logUser);
+  createUserLog(userLog: UserLog) {
+    this.logRef.push(userLog);
   }
 
 }
