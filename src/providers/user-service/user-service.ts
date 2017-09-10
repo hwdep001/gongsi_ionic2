@@ -57,24 +57,4 @@ export class UserService {
     return result;
   }
 
-
-//   /**
-//    * Update sign up data.
-//    * @param verification 
-//    */
-//   async signupUser(verification: Verification) {
-//     let result: boolean = false;
-//     const user: User = {
-//       uid: verification.vUid,
-//       vKey: verification.key,
-//       vDate: verification.vDate
-//     }
-
-//     await this.userRef.child(`${verification.vUid}`).update(user)
-//     .then( () => result = true)
-//     .catch(err => console.log(err));
-
-//     return result;
-//   }
-
 }

@@ -51,7 +51,9 @@ export class UserPage {
       let users = [];
      
       userList.forEach( user => {
-        users.push(user.val());
+        if(user.val().authenticated){
+          users.push(user.val());
+        }
         return false;
       });
 

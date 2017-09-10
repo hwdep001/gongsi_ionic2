@@ -83,11 +83,11 @@ export class MyApp {
 
     loader.dismiss();
     if(auth != null && this._auth.authenticated) {
-      this.rootPage = HomePage;
+      this.nav.setRoot(HomePage);
     } else if (auth != null && !this._auth.authenticated) {
-      this.showAprovalToast("승인 대기 중 입니다.");
+      this.showAprovalToast();
     } else {
-      this.rootPage = SigninPage;
+      this.nav.setRoot(SigninPage);
     }
   }
 
@@ -95,9 +95,7 @@ export class MyApp {
     const homePage: PageInterface = { title: '대시보드', name: 'HomePage',  component: HomePage, icon: 'home' };
     const tabsPage: PageInterface = { title: 'Tabs', name: 'TabsPage', component: TabsPage, icon: 'home'};
     const userTabsPage: PageInterface = { title: '사용자 관리', name: 'UserTabsPage', component: UserTabsPage, icon: 'people' };
-    const signInPage: PageInterface = { title: '로그인', name: 'SignInPage', component: SigninPage, icon: 'log-in' };
-    // const signUpPage: PageInterface = { title: '회원 가입', name: 'SignUpPage', component: SignupPage, icon: 'person-add' };
-    const signOutPage: PageInterface = { title: '로그아웃', name: 'signOut', component: HomePage, icon: 'log-out', signout: true };
+    const signOutPage: PageInterface = { title: '로그아웃', name: 'signOut', component: SigninPage, icon: 'log-out', signout: true };
 
     if(this._auth.authenticated){
       this.navigatePages = [];
@@ -178,7 +176,7 @@ export class MyApp {
     this.lastBack = Date.now();
   }
 
-  async openPage(page) {
+  openPage(page) {
     if(page.signout){
       this._auth.signOut();
     }else {
@@ -203,9 +201,9 @@ export class MyApp {
     return;
   }
 
-  showAprovalToast(message: string) {
+  showAprovalToast() {
     const toast = this.toastCtrl.create({
-      message: message,
+      message: "승인 대기 중 입니다.",
       showCloseButton: true,
       closeButtonText: '확인'
     });

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
 
 import { AuthService } from './../../providers/auth-service/auth-service';
 
@@ -10,10 +9,8 @@ import { AuthService } from './../../providers/auth-service/auth-service';
 export class SigninPage {
 
   constructor(
-    public navCtrl: NavController,
     private _auth: AuthService
   ) {
-
   }
 
   ionViewDidLoad() {

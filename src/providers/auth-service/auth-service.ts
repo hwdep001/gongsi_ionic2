@@ -113,7 +113,7 @@ export class AuthService {
       }
       this._userLog.createUserLog(userLog);
     }
-    return this.afAuth.auth.signOut();
+    return firebase.auth().signOut();
   }
 
 

@@ -20,7 +20,7 @@
 
 </ion-header>
   
-<ion-content class="icontent" scroll=false>
+<ion-content class="icontent">
 
   <ion-list class="ilist">
     <ion-item-sliding *ngFor="let user of userList">
@@ -32,11 +32,11 @@
         <p>{{user.email}}</p>
       </ion-item>
       <ion-item-options side="right" class="ilist-itemoption">
-        <button ion-button color="primary" (click)="showUserInfo(user.uid)" >
+        <button ion-button color="primary" (click)="showUserInfo(user.uid)">
           <ion-icon name="information-circle"></ion-icon>
           정보
         </button>
-        <button ion-button color="danger" (click)="deleteUser(user.uid)" >
+        <button ion-button color="danger" (click)="deleteUser(user.uid)">
           <ion-icon name="trash"></ion-icon>
           삭제
         </button>

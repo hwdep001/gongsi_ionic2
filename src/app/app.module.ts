@@ -27,7 +27,8 @@ import { UserTabsPage } from './../pages/userTabs/userTabs';
   import { UserPage } from './../pages/userTabs/user/user';
     import { UserPhotoPage } from './../pages/userTabs/user/photo/userPhoto';
     import { UserDetailPage } from './../pages/userTabs/user/detail/userDetail';
-//   import { UserLogPage } from './../pages/userTabs/user-log/userLog';
+  import { ApprovePage } from './../pages/userTabs/approval/approval';
+  import { UserLogPage } from './../pages/userTabs/user-log/userLog';
 
 @NgModule({
   declarations: [
@@ -43,11 +44,12 @@ import { UserTabsPage } from './../pages/userTabs/userTabs';
       UserPage,
         UserPhotoPage,
         UserDetailPage,
-    //   UserLogPage,
+      ApprovePage,
+      UserLogPage,
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp, {tabsPlacement: 'top'}),
     IonicStorageModule.forRoot(),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
@@ -67,7 +69,8 @@ import { UserTabsPage } from './../pages/userTabs/userTabs';
       UserPage,
         UserPhotoPage,
         UserDetailPage,
-    //   UserLogPage,
+      ApprovePage,
+      UserLogPage,
   ],
   providers: [
     StatusBar,
