@@ -40,7 +40,7 @@ export class UserPage {
 
   ionViewWillUnload() {
     // console.log('==> ionViewWillUnload UserPage');
-    this.userRef.off();
+    // this.userRef.off();
   }
 
   getUserList() {

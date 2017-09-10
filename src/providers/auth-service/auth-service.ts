@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase';
 
+import { Storage } from '@ionic/storage';
 import { CommonUtil } from './../../utils/commonUtil';
 import { UserService } from './../user-service/user-service';
 import { UserLogService } from './../userLog-service/userLog-service';
@@ -13,16 +13,14 @@ import { UserLog } from './../../model/UserLog';
 @Injectable()
 export class AuthService {
   
-  // authState: any = null;
   user: User;
 
   constructor(
-    private afAuth: AngularFireAuth,
     private storage: Storage,
+    private afAuth: AngularFireAuth,
     private _user: UserService,
     private _userLog: UserLogService
   ) {
-    
   }
 
   get uid(): string {
@@ -48,30 +46,17 @@ export class AuthService {
   get lastSigninDate(): string {
     return this.isSignedIn ? this.user.lastSigninDate : null;
   }
-  
-  get signinCnt(): number {
-    return this.isSignedIn ? this.user.signinCnt : null;
-  }
-  
-  get vKey(): any {
-    return this.isSignedIn ? this.user.vKey : null;
-  }
 
-  get vDate(): any {
-    return this.isSignedIn ? this.user.vDate : null;
-  }
-  
   get isSignedIn(): boolean {
     return this.user == null ? false : true;
-  }
-  
-  get isAuthenticated(): boolean {
-    const key = this.vKey
-    return (key == null || key == false) ? false : true;
   }
 
   get min(): boolean {
     return this.isSignedIn ? this.user.ad : false;
+  }
+
+  get authenticated(): boolean {
+    return this.isSignedIn ? this.user.authenticated : false;
   }
 
   // // // Returns
@@ -81,12 +66,12 @@ export class AuthService {
 
   // Returns current user data
   get currentUser(): any {
-    return this.isAuthenticated ? this.user : null;
+    return this.isSignedIn ? this.user : null;
   }
 
   // Anonymous User
   get currentUserAnonymous(): boolean {
-    return this.isAuthenticated ? this.afAuth.auth.currentUser.isAnonymous : false
+    return this.isSignedIn ? this.afAuth.auth.currentUser.isAnonymous : false
   }
 
   // Returns current user display name or Guest
@@ -117,12 +102,10 @@ export class AuthService {
     }
   }
 
-
-
   //// Sign Out ////
 
   signOut() {
-    if(this.isAuthenticated){
+    if(this.authenticated){
       const userLog: UserLog = {
         createDate: CommonUtil.getCurrentDate(),
         type: "so",
@@ -136,64 +119,46 @@ export class AuthService {
 
   //// Helpers ////
 
-  /**
-   * 로그인 처리
-   */
-  async signinProcess() {
-    let result:boolean = false;
-    const currentDate = CommonUtil.getCurrentDate();
-    const currentUser = this.afAuth.auth.currentUser;
-    
-    if(currentUser == null){
+  async signinProcess(currentUser: firebase.User) {
+
+    // signOut
+    if(!currentUser) {
       this.user = null;
-      return result;
+      return;
     }
 
-    // user 조회
-    let user: any = await this._user.getUser(currentUser.uid);
-    const user_copy = user;
-
-    if(user == null || user.vKey == null) {
-      // sign up
-      user = new User();
-      user.createDate = currentDate;
-      user.signinCnt = 0;
-    } else {
-      // sign in
-      user.signinCnt += 1;
-    }
-    // sign up && sign in
-    user.uid = currentUser.uid;
-    user.email = currentUser.email;
-    user.name = currentUser.displayName;
-    user.photoURL = currentUser.photoURL;
-    user.lastSigninDate = currentDate;
-
-    // user save
-    if(await this._user.saveUser(user)) {
-      await this.setUser();
-      result = true;
-    }
-
-    // create userLog
+    const currentDate = CommonUtil.getCurrentDate();
+    let user: any;
     let userLog: UserLog = {
-      createDate: user.lastSigninDate,
-      type: "su",
-      uid: user.uid
+      createDate: currentDate,
+      type: "si",
+      uid: currentUser.uid
     }
-    if(user_copy == null) {
+
+    user = await this._user.getUser(currentUser.uid);
+    if(user == null) {
+      user = new User();
+      user.uid = currentUser.uid;
+      user.email = currentUser.email;
+      user.name = currentUser.displayName;
+      user.photoURL = currentUser.photoURL;
+      user.createDate = currentDate;
+      user.lastSigninDate = currentDate;
+      user.authenticated = false;
+      userLog.type = "su";
+
+      await this._user.saveUser(user);
       this._userLog.createUserLog(userLog);
-    } else if(user_copy.vKey !=null) {
-      userLog.type = "si";
-      userLog.cnt = user.signinCnt;
+    } else if(user.authenticated) {
+      user.email = currentUser.email;
+      user.name = currentUser.displayName;
+      user.photoURL = currentUser.photoURL;
+      
+      user.lastSigninDate = currentDate;
+
+      await this._user.saveUser(user);
       this._userLog.createUserLog(userLog);
     }
-    
-    return result;
+    this.user = user;
   }
-
-  async setUser() {
-    this.user = await this._user.getUser(this.afAuth.auth.currentUser.uid);
-  }
-
 }

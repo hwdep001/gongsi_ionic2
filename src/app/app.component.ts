@@ -1,25 +1,24 @@
-import { UserLogPage } from './../pages/userTabs/user-log/userLog';
-import { Component, ViewChild } from '@angular/core';
-import { App, Nav, Platform, MenuController, AlertController } from 'ionic-angular';
+import { UserTabsPage } from './../pages/userTabs/userTabs';
+import { SplashPage } from './../pages/splash/spash';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { MenuTitleInterface } from './../model/MenuTitleInterface';
+import { PageInterface } from './../model/PageInterface';
+import { ViewChild, Component } from '@angular/core';
+import { Nav, Platform, App, AlertController, MenuController, ToastController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { AngularFireAuth } from 'angularfire2/auth';
 import { Storage } from '@ionic/storage';
 
 import { CommonUtil } from './../utils/commonUtil';
+import { UserLogService } from './../providers/userLog-service/userLog-service';
 import { AuthService } from './../providers/auth-service/auth-service';
 import { LoadingService } from './../providers/loading-service/loading-service';
-import { UserLogService } from './../providers/userLog-service/userLog-service';
 
-import { MenuTitleInterface } from './../model/MenuTitleInterface';
-import { PageInterface } from './../model/PageInterface';
 import { UserLog } from './../model/UserLog';
 
 import { SigninPage } from './../pages/signin/signin';
-import { SignupPage } from './../pages/signup/signup';
 import { HomePage } from './../pages/home/home';
 import { TabsPage } from './../pages/tabs/tabs';
-import { UserTabsPage } from './../pages/userTabs/userTabs';
 
 @Component({
   templateUrl: 'app.html'
@@ -27,8 +26,9 @@ import { UserTabsPage } from './../pages/userTabs/userTabs';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
+  rootPage:any = SplashPage;
   lastBack: any;
-  rootPage: any;
+
   navigatePages: PageInterface[];
   adminPages: PageInterface[];
   accountPages: PageInterface[];
@@ -38,36 +38,106 @@ export class MyApp {
     admin: null,
     account: null
   }
-
+  
   constructor(
     private platform: Platform,
     private statusBar: StatusBar, 
     private splashScreen: SplashScreen,
     private app: App,
-    private menu: MenuController,
-    private alertCtrl: AlertController,
     private storage: Storage,
     private afAuth: AngularFireAuth,
+    private alertCtrl: AlertController,
+    private toastCtrl: ToastController,
+    private menu: MenuController,
     private _auth: AuthService,
     private _loading: LoadingService,
     private _userLog: UserLogService
   ) {
-    console.log("MyApp - =======================");
-    console.log("MyApp - Create a component.");
     this.initializeApp();
     this.subscribeAuth();
   }
 
   initializeApp() {
-    console.log("MyApp - Initialize App.");
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      console.log("MyApp - Platform ready.");
       this.statusBar.styleDefault();
       this.splashScreen.hide();
       this.platform.registerBackButtonAction(() => this.exitApp());
       this.savePlatform();
+    });
+  }
+
+  subscribeAuth() {
+    this.afAuth.authState.subscribe((auth) => {
+      this.initializeMenu(auth);
+    });
+  }
+
+  async initializeMenu(auth: firebase.User) {
+    let loader = this._loading.getLoader(null, null);
+    loader.present();
+
+    await this._auth.signinProcess(auth);
+    this.setPages();
+
+    loader.dismiss();
+    if(auth != null && this._auth.authenticated) {
+      this.rootPage = HomePage;
+    } else if (auth != null && !this._auth.authenticated) {
+      this.showAprovalToast("승인 대기 중 입니다.");
+    } else {
+      this.rootPage = SigninPage;
+    }
+  }
+
+  private setPages(): void {
+    const homePage: PageInterface = { title: '대시보드', name: 'HomePage',  component: HomePage, icon: 'home' };
+    const tabsPage: PageInterface = { title: 'Tabs', name: 'TabsPage', component: TabsPage, icon: 'home'};
+    const userTabsPage: PageInterface = { title: '사용자 관리', name: 'UserTabsPage', component: UserTabsPage, icon: 'people' };
+    const signInPage: PageInterface = { title: '로그인', name: 'SignInPage', component: SigninPage, icon: 'log-in' };
+    // const signUpPage: PageInterface = { title: '회원 가입', name: 'SignUpPage', component: SignupPage, icon: 'person-add' };
+    const signOutPage: PageInterface = { title: '로그아웃', name: 'signOut', component: HomePage, icon: 'log-out', signout: true };
+
+    if(this._auth.authenticated){
+      this.navigatePages = [];
+      this.navigatePages.push(homePage);
+      this.navigatePages.push(tabsPage);
+    }
+
+    if(this._auth.min) {
+      this.adminPages = [];
+      this.adminPages.push(userTabsPage);
+    }
+
+    if(this._auth.authenticated){
+      this.accountPages = [];
+      this.accountPages.push(signOutPage);
+    }
+
+    this.menuTitle.header = "Menu";
+    this.menuTitle.navigate = "Navigate";
+    this.menuTitle.admin = "Admin";
+    this.menuTitle.account = "Account";
+  }
+
+  async savePlatform() {
+    
+    let thisPlatform = null;
+
+    if(this.platform.is('browser')) {
+      thisPlatform = "browser";
+    } else if (this.platform.is('core')) {
+      thisPlatform = "core";
+    } else if (this.platform.is('android')) {
+      thisPlatform = "android";
+    } else if (this.platform.is('ios')) {
+      thisPlatform = "ios";
+    }
+
+    await this.storage.set("platform", thisPlatform)
+    .then(platform => {
+      console.log("MyApp - Current platform: " + platform);
     });
   }
 
@@ -79,7 +149,7 @@ export class MyApp {
         {
           text: 'Yes',
           handler: () => {
-            if(this._auth.isAuthenticated){
+            if(this._auth.authenticated){
               const userLog: UserLog = {
                 createDate: CommonUtil.getCurrentDate(),
                 type: "ex",
@@ -108,92 +178,13 @@ export class MyApp {
     this.lastBack = Date.now();
   }
 
-  private setPages(): void {
-    const homePage: PageInterface = { title: '대시보드', name: 'HomePage',  component: HomePage, icon: 'home' };
-    const tabsPage: PageInterface = { title: 'Tabs', name: 'TabsPage', component: TabsPage, icon: 'home'};
-    const userTabsPage: PageInterface = { title: '사용자 관리', name: 'UserTabsPage', component: UserTabsPage, icon: 'people' };
-    const signOut: PageInterface = { title: '로그아웃', name: 'signOut', component: UserTabsPage, icon: 'log-out', signout: true };
-
-    this.navigatePages = [];
-    this.navigatePages.push(homePage);
-    this.navigatePages.push(tabsPage);
-
-    if(this._auth.min) {
-      this.adminPages = [];
-      this.adminPages.push(userTabsPage);
-    }
-
-    this.accountPages = [];
-    this.accountPages.push(signOut);
-  }
-
-  subscribeAuth() {
-    this.afAuth.authState.subscribe((auth) => {
-      this.initializeMenu();
-    });
-  }
-  
-  async initializeMenu() {
-    let loading = this._loading.getLoader(null, null, true);
-    loading.present();
-
-    const updateUserResult = await this._auth.signinProcess();
-
-    this.menu.enable(false, 'menu');
-    this.menuTitle.header = "Menu";
-    this.menuTitle.navigate = "Navigate";
-    this.menuTitle.admin = "Admin";
-    this.menuTitle.account = "Account";
-    this.setPages();
-
-    if (updateUserResult && this._auth.isAuthenticated) {
-      
-      this.menu.enable(updateUserResult == true, 'menu');
-      this.rootPage = UserLogPage;
-
-      console.log("MyApp - authenticated: Sign in");
-    } else if (updateUserResult && this._auth.isSignedIn) {
-      this.rootPage = SignupPage;
-      console.log("MyApp - authenticated: Sign in");
-    } else {
-      this.rootPage = SigninPage;
-      console.log("MyApp - authenticated: Sign out");
-    }
-
-    loading.dismiss();
-  }
-
-  async savePlatform() {
-
-    let thisPlatform = null;
-
-    if(this.platform.is('browser')) {
-      thisPlatform = "browser";
-    } else if (this.platform.is('core')) {
-      thisPlatform = "core";
-    } else if (this.platform.is('android')) {
-      thisPlatform = "android";
-    } else if (this.platform.is('ios')) {
-      thisPlatform = "ios";
-    }
-
-    await this.storage.set("platform", thisPlatform)
-    .then(platform => {
-      console.log("MyApp - Current platform: " + platform);
-    });
-  }
-
   async openPage(page) {
-    // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
-
     if(page.signout){
-      await this._auth.signOut();
+      this._auth.signOut();
     }else {
       this.nav.setRoot(page.component);
     }
-
-  };
+  }
 
   isActive(page: PageInterface) {
     // let childNav = this.nav.getActiveChildNavs()[0];
@@ -211,5 +202,19 @@ export class MyApp {
     }
     return;
   }
-}
 
+  showAprovalToast(message: string) {
+    const toast = this.toastCtrl.create({
+      message: message,
+      showCloseButton: true,
+      closeButtonText: '확인'
+    });
+
+    toast.onDidDismiss(() => {
+      this._auth.signOut();
+    });
+
+    toast.present();
+  }
+
+}

@@ -2,21 +2,27 @@
 </ion-header>
 
 <ion-content class="icontent" padding>
-  <h3>Ionic sing in page</h3>
-  <div>uid : {{_auth.uid}}</div>
-  <div>email : {{_auth.email}}</div>
-  <div>name : {{_auth.name}}</div>
-  <div>photoURL : {{_auth.photoURL}}</div>
-  <div>createDate : {{_auth.createDate}}</div>
-  <div>lastSigninDate : {{_auth.lastSigninDate}}</div>
-  <div>signinCnt : {{_auth.signinCnt}}</div>
-  <div>vKey : {{_auth.vKey}}</div>
-  <div>vDate : {{_auth.vDate}}</div>
-  <br>
-  <div>is signed in? : {{_auth.isSignedIn}}</div>
-  <div>is authenticated : {{_auth.isAuthenticated}}</div>
-  <br>
-  <div>display name: {{_auth.currentUserDisplayName}}</div>
-
-  <button ion-button outline (click)="signInWithGoogle()">SIGN IN</button>
+  <ion-list class="ilist">
+    <ion-item class="item-btn" no-lines>
+        <button class="signInBtn" ion-button block icon-left (click)="signInWithGoogle()">
+            <ion-icon name="logo-googleplus"></ion-icon>
+            SIGN UP WITH Google+
+        </button>
+    </ion-item>
+    <!-- <ion-item>
+        <div>uid : {{_auth.uid}}</div>
+        <div>email : {{_auth.email}}</div>
+        <div>name : {{_auth.name}}</div>
+        <div>photoURL : {{_auth.photoURL}}</div>
+        <br>
+        <div>createDate : {{_auth.createDate}}</div>
+        <div>lastSigninDate : {{_auth.lastSigninDate}}</div>
+        <br>
+        <div>ad : {{_auth.min}}</div>
+        <div>is authenticated : {{_auth.authenticated}}</div>
+        <br>
+        <div>is signed in? : {{_auth.isSignedIn}}</div>
+        <div>display name: {{_auth.currentUserDisplayName}}</div>
+    </ion-item> -->
+  </ion-list>
 </ion-content>

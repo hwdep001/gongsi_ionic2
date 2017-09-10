@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 
 import { UserPage } from './user/user';
-import { UserLogPage } from './user-log/userLog';
-import { VerificationPage } from './verification/verification';
 
 @Component({
   selector: 'page-userTabs',
@@ -11,8 +9,8 @@ import { VerificationPage } from './verification/verification';
 export class UserTabsPage {
 
   tab1Root: any = UserPage;
-  tab2Root: any = VerificationPage;
-  tab3Root: any = UserLogPage;
+//   tab2Root: any = appo;
+//   tab3Root: any = UserLogPage;
 
   constructor() {
   }

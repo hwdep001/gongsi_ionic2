@@ -6,9 +6,9 @@ export interface UserInterface {
 
     createDate?: any;
     lastSigninDate?: any;
-    signinCnt?: number;
-    vKey?: any;
-    vDate?: any;
+    ad?: boolean;
+
+    authenticated?: boolean;
 }
 
 export class User implements UserInterface {
@@ -19,10 +19,9 @@ export class User implements UserInterface {
 
     createDate?: any;
     lastSigninDate?: any;
-    signinCnt?: number;
-    vKey?: any;
-    vDate?: any;
     ad?: boolean;
+
+    authenticated?: boolean;
 
     constructor(){
 

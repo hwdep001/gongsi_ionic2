@@ -36,21 +36,9 @@
       </ion-note>
     </ion-item>
     <ion-item class="ilist-item">
-      로그인 횟수
+      인증 상태
       <ion-note item-end>
-        {{user.signinCnt}}
-      </ion-note>
-    </ion-item>
-    <ion-item class="ilist-item">
-      인증 코드
-      <ion-note item-end>
-        {{user.vKey}}
-      </ion-note>
-    </ion-item>
-    <ion-item class="ilist-item">
-      인증 날짜
-      <ion-note item-end>
-        {{user.vDate}}
+        {{user.authenticated ? "승인" : "대기"}}
       </ion-note>
     </ion-item>
   </ion-list>

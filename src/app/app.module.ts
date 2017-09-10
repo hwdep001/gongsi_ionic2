@@ -12,13 +12,12 @@ import { environment } from '../environments/environment';
 import { AuthService } from '../providers/auth-service/auth-service';
 import { GlobalVar } from '../providers/global-var/global-var';
 import { LoadingService } from '../providers/loading-service/loading-service';
-import { VerificationService } from '../providers/verification-service/verification-service';
-import { UserService } from '../providers/user-service/user-service';
+import { UserService } from './../providers/user-service/user-service';
 import { UserLogService } from './../providers/userLog-service/userLog-service';
 
 import { MyApp } from './app.component';
+import { SplashPage } from './../pages/splash/spash';
 import { SigninPage } from './../pages/signin/signin';
-import { SignupPage } from './../pages/signup/signup';
 import { HomePage } from './../pages/home/home';
 import { TabsPage } from './../pages/tabs/tabs';
   import { Tab3Page } from './../pages/tabs/tab3/tab3';
@@ -28,15 +27,13 @@ import { UserTabsPage } from './../pages/userTabs/userTabs';
   import { UserPage } from './../pages/userTabs/user/user';
     import { UserPhotoPage } from './../pages/userTabs/user/photo/userPhoto';
     import { UserDetailPage } from './../pages/userTabs/user/detail/userDetail';
-  import { UserLogPage } from './../pages/userTabs/user-log/userLog';
-  import { VerificationPage } from './../pages/userTabs/verification/verification';
-    import { VerificationDetailPage } from './../pages/userTabs/verification/detail/verificationDetail';
+//   import { UserLogPage } from './../pages/userTabs/user-log/userLog';
 
 @NgModule({
   declarations: [
     MyApp,
+    SplashPage,
     SigninPage,
-    SignupPage,
     HomePage,
     TabsPage,
       Tab1Page,
@@ -46,9 +43,7 @@ import { UserTabsPage } from './../pages/userTabs/userTabs';
       UserPage,
         UserPhotoPage,
         UserDetailPage,
-      UserLogPage,
-      VerificationPage,
-        VerificationDetailPage
+    //   UserLogPage,
   ],
   imports: [
     BrowserModule,
@@ -61,8 +56,8 @@ import { UserTabsPage } from './../pages/userTabs/userTabs';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    SplashPage,
     SigninPage,
-    SignupPage,
     HomePage,
     TabsPage,
       Tab1Page,
@@ -72,9 +67,7 @@ import { UserTabsPage } from './../pages/userTabs/userTabs';
       UserPage,
         UserPhotoPage,
         UserDetailPage,
-      UserLogPage,
-      VerificationPage,
-        VerificationDetailPage
+    //   UserLogPage,
   ],
   providers: [
     StatusBar,
@@ -82,7 +75,6 @@ import { UserTabsPage } from './../pages/userTabs/userTabs';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     GlobalVar,
     AuthService,
-    VerificationService,
     LoadingService,
     UserService,
     UserLogService

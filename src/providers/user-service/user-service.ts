@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as firebase from 'firebase';
 
-import { Verification } from './../../model/Verification';
 import { User } from './../../model/User';
 
 @Injectable()
@@ -14,6 +13,20 @@ export class UserService {
     this.userRef = firebase.database().ref("/users");
   }
 
+  /**
+   * Set user.
+   * @param user 
+   */
+  async createUser(user: User) {
+    let result: boolean = false;
+
+    await this.userRef.child(`${user.uid}`).set(user)
+    .then()
+    .catch(err => console.log("createUser fail - " + err.name + ": " + err.message));
+
+    return result;
+  }
+
 
   /**
    * Create || update user.
@@ -24,7 +37,7 @@ export class UserService {
 
     await this.userRef.child(`${user.uid}`).update(user)
     .then( () => result = true)
-    .catch(err => console.log(err));
+    .catch(err => console.log('saveUser ERROR: ' + err.message));
 
     return result;
   }
@@ -45,23 +58,23 @@ export class UserService {
   }
 
 
-  /**
-   * Update sign up data.
-   * @param verification 
-   */
-  async signupUser(verification: Verification) {
-    let result: boolean = false;
-    const user: User = {
-      uid: verification.vUid,
-      vKey: verification.key,
-      vDate: verification.vDate
-    }
+//   /**
+//    * Update sign up data.
+//    * @param verification 
+//    */
+//   async signupUser(verification: Verification) {
+//     let result: boolean = false;
+//     const user: User = {
+//       uid: verification.vUid,
+//       vKey: verification.key,
+//       vDate: verification.vDate
+//     }
 
-    await this.userRef.child(`${verification.vUid}`).update(user)
-    .then( () => result = true)
-    .catch(err => console.log(err));
+//     await this.userRef.child(`${verification.vUid}`).update(user)
+//     .then( () => result = true)
+//     .catch(err => console.log(err));
 
-    return result;
-  }
+//     return result;
+//   }
 
 }

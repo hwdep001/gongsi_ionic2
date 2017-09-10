@@ -1,0 +1,19 @@
+page-spash {
+
+    .icontent {
+        user-select: text;
+
+        .scroll-content {
+            padding-bottom: 0px !important;
+
+            background-image: url("../assets/img/signin_bg1.jpg");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            
+            justify-content: center;
+            display: flex!important;
+            align-items: center!important;
+        }
+    }
+}
