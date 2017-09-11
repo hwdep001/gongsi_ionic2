@@ -15,6 +15,8 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 
+@import "../pages/components/chatBubble/chatBubble";
+
 .split-pane-md.split-pane-visible > .split-pane-side {
     min-width: 220px;
     max-width: 15%;
@@ -51,5 +53,14 @@ ion-nav {
     .fixed-content{
         // background-color: map-get($colors, content-bg);
         background-color: white;
+    }
+}
+
+
+//
+.icontent {
+
+    .scroll-content {
+        background-color: #e9ebee !important;
     }
 }

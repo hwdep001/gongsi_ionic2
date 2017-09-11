@@ -2,20 +2,19 @@ page-approval {
     
     .icontent {
         user-select: text;
-
-        .scroll-content {
-            padding: 5px;
-        }
-
+          
         .ilist {
-
+            
+            ion-item-sliding {
+                background-color: #e9ebee;
+            } 
+            
             .ilist-item {
-                
-
+                background-color: #e9ebee;
             }
-
+            
             .ilist-itemoption {
-
+                
                 button {
                     width: 50px;
                 } 

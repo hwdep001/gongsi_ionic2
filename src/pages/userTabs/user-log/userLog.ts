@@ -1,3 +1,4 @@
+import { ChatBubble } from './../../../model/ChatBubble';
 import { Component, ViewChild } from '@angular/core';
 import { Content, NavController } from 'ionic-angular';
 import * as firebase from 'firebase';
@@ -66,14 +67,20 @@ export class UserLogPage {
     
     
     this.logRef.orderByChild("createDate").limitToLast(30).on('value', snapList => {
-      let logs = [];
+      let logs: ChatBubble[] = [];
      
-      snapList.forEach( v => {
+      snapList.forEach( snapshot => {
+        const userLog = snapshot.val();
+        let log: ChatBubble = {
+          uid: userLog.uid,
+          position: userLog.type,
+          time: userLog.createDate,
+          content: this.getTypeMap(userLog.type)
+        }
 
-        let log = v.val();
-        log.typeVal = this.getTypeMap(log.type);
         this._user.getUser(log.uid).then(user => {
-          log.user = user;
+          log.img = user.photoURL;
+          log.senderName = user.name;
           logs.push(log);
         });
             
@@ -81,8 +88,8 @@ export class UserLogPage {
       });
 
       this.loadedLogList = logs;
-      // this.initializeVs();
       this.logList = this.loadedLogList;
+
       this.scrollToBottom();
       loader.dismiss();
     });

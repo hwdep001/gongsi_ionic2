@@ -2,24 +2,20 @@ page-myInfo {
   
     .icontent {
 
-        .scroll-content {
-            background-color: #e9ebee !important;
+        .ilist {
+            
+            .iheader {
+                background-color: #e9ebee;
+                margin: 0px;
+            }
 
-            .ilist {
-                .iheader {
-                    background-color: #e9ebee;
-                    margin: 0px;
+            .iitem {
+
+                .inote {
                 }
-    
-                .iitem {
-    
-                    .inote {
-    
-                    }
-    
-                    .signout {
-                        color: #0CB3B6;
-                    }
+
+                .signout {
+                    color: #0CB3B6;
                 }
             }
         }
