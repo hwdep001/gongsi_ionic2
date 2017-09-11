@@ -1,25 +1,36 @@
 import { Component, ViewChild } from '@angular/core';
-import { Content } from 'ionic-angular';
+import { Content, NavController } from 'ionic-angular';
 import * as firebase from 'firebase';
 
 import { LoadingService } from './../../../providers/loading-service/loading-service';
+import { UserService } from './../../../providers/user-service/user-service';
+
+import { UserDetailPage } from './../user/detail/userDetail';
+import { UserPhotoPage } from './../user/photo/userPhoto';
 
 @Component({
   selector: 'page-userLog',
-  templateUrl: 'userLog.html'
+  templateUrl: 'userLog.html',
 })
 export class UserLogPage {
   @ViewChild(Content) content: Content
 
   logRef: firebase.database.Reference;
+  userRef: firebase.database.Reference;
 
   logList: Array<any>;
   loadedLogList: Array<any>;
 
+  typeMap: Map<string, string>;
+
   constructor(
-    private _loading: LoadingService
+    private navCtrl: NavController,
+    private _loading: LoadingService,
+    private _user: UserService
   ) {
+    this.setTypeMap()
     this.logRef = firebase.database().ref("/logs/user");
+    this.userRef = firebase.database().ref("/users");
     this.getLogList();
   }
 
@@ -37,16 +48,35 @@ export class UserLogPage {
     }, 300);
   }
 
+  setTypeMap() {
+    this.typeMap = new Map();
+    this.typeMap.set("ex", "종료");
+    this.typeMap.set("su", "가입");
+    this.typeMap.set("si", "로그인");
+    this.typeMap.set("so", "로그아웃");
+  }
+
+  getTypeMap(type) {
+    return this.typeMap.get(type);
+  }
 
   getLogList() {
     const loader = this._loading.getLoader(null, null);
     loader.present();
     
-    this.logRef.orderByChild("createDate").on('value', snapList => {
+    
+    this.logRef.orderByChild("createDate").limitToLast(30).on('value', snapList => {
       let logs = [];
      
       snapList.forEach( v => {
-        logs.push(v.val());
+
+        let log = v.val();
+        log.typeVal = this.getTypeMap(log.type);
+        this._user.getUser(log.uid).then(user => {
+          log.user = user;
+          logs.push(log);
+        });
+            
         return false;
       });
 
@@ -56,6 +86,14 @@ export class UserLogPage {
       this.scrollToBottom();
       loader.dismiss();
     });
+  }
+
+  showUserPhoto(photoURL: string) {
+    this.navCtrl.push(UserPhotoPage, {photoURL: photoURL});
+  }
+
+  showUserInfo(key: string){
+    this.navCtrl.push(UserDetailPage, {key: key});
   }
 
 }

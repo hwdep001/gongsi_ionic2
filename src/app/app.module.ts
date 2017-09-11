@@ -29,6 +29,7 @@ import { UserTabsPage } from './../pages/userTabs/userTabs';
     import { UserDetailPage } from './../pages/userTabs/user/detail/userDetail';
   import { ApprovePage } from './../pages/userTabs/approval/approval';
   import { UserLogPage } from './../pages/userTabs/user-log/userLog';
+import { MyInfoPage } from './../pages/myInfo/myInfo';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { UserTabsPage } from './../pages/userTabs/userTabs';
         UserDetailPage,
       ApprovePage,
       UserLogPage,
+    MyInfoPage
   ],
   imports: [
     BrowserModule,
@@ -71,6 +73,7 @@ import { UserTabsPage } from './../pages/userTabs/userTabs';
         UserDetailPage,
       ApprovePage,
       UserLogPage,
+    MyInfoPage
   ],
   providers: [
     StatusBar,

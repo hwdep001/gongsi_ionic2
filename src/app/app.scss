@@ -30,6 +30,13 @@ ion-menu{
 
         ion-list-header {
             background-color: white;
+            margin: 0px;
+            max-height: 30px;
+            min-height: 30px;
+
+            ion-label {
+                margin-bottom: 0px;
+            }
         }
 
         button {

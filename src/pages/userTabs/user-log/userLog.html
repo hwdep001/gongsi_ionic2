@@ -9,10 +9,14 @@
   
 <ion-content #content class="icontent">
 
-  <ion-list no-lines class="ilist">
+  <ion-list class="ilist">
     <ion-item *ngFor="let log of logList">
-        <!-- <chat-bubble>{{log.createDate}} : {{log.type}} : {{log.uid}}</chat-bubble> -->
-        {{log.createDate}} : {{log.type}} : {{log.uid}}
+        <ion-avatar item-start (click)="showUserPhoto(log.user.photoURL)" >
+          <img [src]="log.user.photoURL ? log.user.photoURL : 'assets/img/google_default_photo.jpg'">
+        </ion-avatar>
+        <h2 (click)="showUserInfo(log.uid)" >{{log.user.name}}</h2>
+        <p>{{log.typeVal}}</p>
+        <p>{{log.createDate}}</p>
     </ion-item>
   </ion-list>
   

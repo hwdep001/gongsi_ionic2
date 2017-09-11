@@ -19,6 +19,7 @@ import { UserLog } from './../model/UserLog';
 import { SigninPage } from './../pages/signin/signin';
 import { HomePage } from './../pages/home/home';
 import { TabsPage } from './../pages/tabs/tabs';
+import { MyInfoPage } from './../pages/myInfo/myInfo';
 
 @Component({
   templateUrl: 'app.html'
@@ -95,7 +96,7 @@ export class MyApp {
     const homePage: PageInterface = { title: '대시보드', name: 'HomePage',  component: HomePage, icon: 'home' };
     const tabsPage: PageInterface = { title: 'Tabs', name: 'TabsPage', component: TabsPage, icon: 'home'};
     const userTabsPage: PageInterface = { title: '사용자 관리', name: 'UserTabsPage', component: UserTabsPage, icon: 'people' };
-    const signOutPage: PageInterface = { title: '로그아웃', name: 'signOut', component: SigninPage, icon: 'log-out', signout: true };
+    const myInfoPage: PageInterface = { title: '내 정보', name: 'MyInfoPage', component: MyInfoPage, icon: 'information-circle' };
 
     if(this._auth.authenticated){
       this.navigatePages = [];
@@ -110,7 +111,7 @@ export class MyApp {
 
     if(this._auth.authenticated){
       this.accountPages = [];
-      this.accountPages.push(signOutPage);
+      this.accountPages.push(myInfoPage);
     }
 
     this.menuTitle.header = "Menu";
@@ -177,11 +178,7 @@ export class MyApp {
   }
 
   openPage(page) {
-    if(page.signout){
-      this._auth.signOut();
-    }else {
-      this.nav.setRoot(page.component);
-    }
+    this.nav.setRoot(page.component);
   }
 
   isActive(page: PageInterface) {

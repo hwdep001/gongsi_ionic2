@@ -2,5 +2,24 @@ page-approval {
     
     .icontent {
         user-select: text;
+
+        .scroll-content {
+            padding: 5px;
+        }
+
+        .ilist {
+
+            .ilist-item {
+                
+
+            }
+
+            .ilist-itemoption {
+
+                button {
+                    width: 50px;
+                } 
+            }
+        }
     }
 }
