@@ -1,3 +1,102 @@
 page-tab2 {
 
+    .icontent {
+
+        .icard {
+            border-top: 3px solid;
+            border-radius: 3px;
+
+            .icard-item {
+                padding: 0px;
+                margin: 0px;
+                background-color: #f5f5f5;
+
+                border-bottom: 1px solid;
+                border-color: #dddddd;
+                
+                .label-md {
+                    margin: 0px;
+                }
+
+                .header-row {
+                    
+                    .header-dic-icon {
+
+                    }
+                    .header-head1 {
+                        
+                    }
+                    .header-head2-icon{
+                        // background-color: blue;
+                        border-left: 1px soild;
+                        border-color: #dddddd;
+                    }
+                }
+            }
+
+            .icard-content {
+                // background-color: red;
+                padding: 8px;
+                height: 80px;
+
+                .body1-row {
+                    // height: 100%;
+                    // background-color: green;
+
+                    ion-col {
+                        // background-color: blue;
+                    }
+                }
+
+                .body2-row {
+                    margin: 3px 15px 5px 15px;
+                    color: #656565;
+                    font-size: 13px;
+                    // background-color: red;
+
+                    ion-col {
+                        // background-color: blue;
+                    }
+                }
+            }
+            .icard-foot-row {
+                background-color: #f5f5f5;
+
+                border-top: 1px solid;
+                border-color: #dddddd;
+
+                .foot-up {
+                }
+
+                .foot-desc-col {
+                    .foot-desc-note {
+                        color: gray;
+                    }
+                }
+                .foot-down {
+
+                }
+            }
+
+        }
+
+        .icard-border-2 {
+            border-color: map-get($colors, level-2);
+        }
+        .icard-border-1 {
+            border-color: map-get($colors, level-1);
+        }
+        .icard-border0 {
+            border-color: map-get($colors, level0);
+        }
+        .icard-borderundefined {
+            border-color: map-get($colors, level0);
+        }
+        .icard-border1 {
+            border-color: map-get($colors, level1);
+        }
+        .icard-border2 {
+            border-color: map-get($colors, level2);
+        }
+    }
 }

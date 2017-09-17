@@ -7,6 +7,103 @@
   </ion-navbar>
 </ion-header>
   
-<ion-content padding>
-  <h3>Tab2 Page</h3>
+<ion-content class="icontent">
+  <ion-list>
+    <ion-item>
+      <ion-label>Subject</ion-label>
+        <ion-select [(ngModel)]="selectedSub" cancelText="Cancel" okText="Select" 
+                    (ionChange)="changeSubject()">
+          <ion-option *ngFor="let sub of subjects" value="{{sub.key}}">{{sub.name}}</ion-option>
+        </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Category</ion-label>
+        <ion-select [(ngModel)]="selectedCats" cancelText="Cancel" okText="Select" multiple="true"
+                    [disabled]="selectedSub == null" (ionChange)="changeCategory()">
+          <ion-option *ngFor="let cat of categories" value="{{cat.key}}">{{cat.name}}</ion-option>
+        </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Lecture</ion-label>
+      <ion-select [(ngModel)]="selectedLecs" cancelText="Cancel" okText="Select" multiple="true" 
+                  [disabled]="selectedCats.length == 0" (ionChange)="checkSearchFlag()">
+        <ion-option *ngFor="let lec of lectures" value="{{lec.key}}">{{lec.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Levels</ion-label>
+      <ion-select [(ngModel)]="selectedLevs" multiple="true" cancelText="Cancel" okText="Select"
+                  (ionChange)="checkSearchFlag()">
+        <ion-option *ngFor="let lev of levels" value="{{lev.key}}">{{lev.value}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Count</ion-label>
+      <ion-select [(ngModel)]="selectedCnt" cancelText="Cancel" okText="Select"
+                  (ionChange)="checkSearchFlag()">
+        <ion-option *ngFor="let cnt of counts" value="{{cnt}}">{{cnt}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <button ion-button block medium [disabled]="searchFlag == false" (click)="searchWord()">Search</button>
+    </ion-item>
+  </ion-list>
+
+  <!-- <div>size: {{words.length}}</div>
+  <ion-list>
+    <ion-item class="text" *ngFor="let word of words">
+      {{word.key}}: {{word.body1}} - {{word.body2}}
+    </ion-item>
+  </ion-list> -->
+  <ion-card [ngClass]="'icard icard-border' + word.levels[_auth.uid]"  *ngFor="let word of words">
+    <ion-item class="icard-item">
+      <ion-row class="header-row">
+        <ion-col col-2 class="header-dic-icon">
+          <button ion-button color="_gray" clear small icon-start>
+            <ion-icon name='bookmarks'></ion-icon>
+          </button>
+        </ion-col>
+        <ion-col col-8 class="header-head1" align-self-center>
+          {{word.head1}}
+        </ion-col>
+        <ion-col col-2 class="header-head2-icon" text-center>
+          <button ion-button color="_gray" clear small icon-start>
+            <ion-icon name='information'></ion-icon>
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-item>
+  
+    <ion-card-content class="icard-content">
+      <ion-row class="body1-row">
+        <ion-col align-self-center>
+          {{word.body1}}
+        </ion-col>
+      </ion-row>
+      <ion-row class="body2-row">
+          <ion-col align-self-center>
+            {{word.body2}}
+          </ion-col>
+        </ion-row>
+    </ion-card-content>
+  
+    <ion-row class="icard-foot-row">
+      <ion-col col-2 class="foot-up" text-center>
+        <button ion-button color="_gray" clear small icon-start (click)="clickThumbs(1, word)">
+          <ion-icon name='thumbs-up'></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col class="foot-desc-col" align-self-center text-center>
+        <ion-note class="foot-desc-note">
+          {{word.categoryName}}-{{word.lectrueName}}
+        </ion-note>
+      </ion-col>
+      <ion-col col-2 class="foot-down" text-center>
+        <button ion-button color="_gray" clear small icon-start (click)="clickThumbs(-1, word)">
+          <ion-icon name='thumbs-down'></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+
 </ion-content>
