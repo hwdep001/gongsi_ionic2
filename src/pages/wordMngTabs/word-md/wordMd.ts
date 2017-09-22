@@ -142,9 +142,13 @@ export class WordMdPage {
 	}
 
 	export() {
-		this.convertWortToData(this.words);
-		const fileName: string = "SheetJS.xlsx";
-		this._file.export(fileName, this.data);
+		if(this.words.length > 0) {
+			this.convertWortToData(this.words);
+			const word0 = this.words[0];
+			const fileName: string = new Date().yyMMdd() + "_" 
+					+ word0.categoryName + "_" + word0.lectrueName + ".xlsx";
+			this._file.export(fileName, this.data);
+		}
 	}
 
 	convertWortToData(words: Array<Word>) {

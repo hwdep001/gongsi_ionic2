@@ -10,7 +10,6 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
 
-import { CommonUtil } from './../utils/commonUtil';
 import { UserLogService } from './../providers/userLog-service/userLog-service';
 import { AuthService } from './../providers/auth-service/auth-service';
 import { LoadingService } from './../providers/loading-service/loading-service';
@@ -153,7 +152,7 @@ export class MyApp {
           handler: () => {
             if(this._auth.authenticated){
               const userLog: UserLog = {
-                createDate: CommonUtil.getCurrentDate(),
+                createDate: new Date().yyyy_MM_dd_HH_mm_ss(),
                 type: "ex",
                 uid: this._auth.uid
               }

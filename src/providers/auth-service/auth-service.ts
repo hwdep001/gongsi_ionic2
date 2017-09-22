@@ -3,7 +3,6 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase';
 
 import { Storage } from '@ionic/storage';
-import { CommonUtil } from './../../utils/commonUtil';
 import { UserService } from './../user-service/user-service';
 import { UserLogService } from './../userLog-service/userLog-service';
 
@@ -107,7 +106,7 @@ export class AuthService {
   signOut() {
     if(this.authenticated){
       const userLog: UserLog = {
-        createDate: CommonUtil.getCurrentDate(),
+        createDate: new Date().yyyy_MM_dd_HH_mm_ss(),
         type: "so",
         uid: this.uid
       }
@@ -127,7 +126,7 @@ export class AuthService {
       return;
     }
 
-    const currentDate = CommonUtil.getCurrentDate();
+    const currentDate = new Date().yyyy_MM_dd_HH_mm_ss();
     let user: any;
     let userLog: UserLog = {
       createDate: currentDate,

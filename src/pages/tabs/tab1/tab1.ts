@@ -2,7 +2,6 @@ import { Lecture } from './../../../model/Lecture';
 import { Category } from './../../../model/Category';
 import { Word } from './../../../model/Word';
 import { Subject } from './../../../model/Subject';
-import { CommonUtil } from './../../../utils/commonUtil';
 import { User } from './../../../model/User';
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
@@ -24,7 +23,7 @@ export class Tab1Page {
 
   createUser() {
     for(let i=1; i<=10; i++){
-      const currentDate = CommonUtil.getCurrentDate();
+      const currentDate = new Date().yyyy_MM_dd_HH_mm_ss();
       const idx = (i<10 ? "0"+i.toString(): i);
       const user: User = {
         uid: `test${idx}`,
@@ -137,7 +136,7 @@ export class Tab1Page {
       subs.forEach(sub => {
         this.getCategories(sub.key).then(cats => {
           cats.forEach(cat => {
-            let ref = firebase.database().ref(`/words/${sub.key}/list/${cat.key}/list`).remove();
+            firebase.database().ref(`/words/${sub.key}/list/${cat.key}/list`).remove();
           });
         });
       });
@@ -199,7 +198,7 @@ export class Tab1Page {
           cats.forEach(cat => {
             this.getLectures(sub.key, cat.key).then(lecs => {
               lecs.forEach(lec => {
-                let ref = firebase.database().ref(`/words/${sub.key}/list/${cat.key}/list/${lec.key}/list`).remove();
+                firebase.database().ref(`/words/${sub.key}/list/${cat.key}/list/${lec.key}/list`).remove();
               });
             });
           });
