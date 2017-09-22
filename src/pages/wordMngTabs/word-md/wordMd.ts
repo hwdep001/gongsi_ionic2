@@ -1,3 +1,4 @@
+import { CommonUtil } from './../../../utils/commonUtil';
 import { AlertController } from 'ionic-angular';
 import { Component } from '@angular/core';
 import * as firebase from 'firebase';
@@ -25,6 +26,7 @@ export class WordMdPage {
 	categories: Array<Category> = new Array<Category>();
 	lectures: Array<Lecture> = new Array<Lecture>();
 	words: Array<Word> = new Array<Word>();
+	words_: Array<Word> = new Array<Word>();
 
 	selectedSub: string = null;
 	selectedCat: string = null;
@@ -88,6 +90,7 @@ export class WordMdPage {
 	async changeLecture() {
 		this.searchFlag = true;
 		this.words = await this._word.getWords(this.selectedSub, this.selectedCat, this.selectedLec);
+		this.words_ = this.words.map(x => Object.assign({}, x));
 	}
 
 	///////////////////////////////////////////////////
@@ -105,9 +108,33 @@ export class WordMdPage {
 		}
 
 		let ref = this.wordRef.child(`${this.selectedSub}/list/${this.selectedCat}/list/${this.selectedLec}/list`);
-		this.words.forEach(word => {
-			ref.child(word.key).update(word);
-		})
+		
+		if(this.words.length < 1) {
+			ref.remove();
+
+		}else {
+			let i = 1;
+
+			this.words.forEach(word => {
+
+				if(CommonUtil.isStringEmpty(word.head1) && CommonUtil.isStringEmpty(word.body1)) {
+					return;
+
+				} else if(word.key != null && word.status == 1) {
+					ref.child(word.key).remove();
+
+				} else {
+					word.num = i++;
+					if(word.key == null) {
+						this._word.pushWord(this.selectedSub, this.selectedCat, this.selectedLec, word);
+					} else {
+						ref.child(word.key).update(word);
+					}
+				}
+			});
+		}
+
+		this.changeLecture();
 	}
 
 	checkSaveData(): ResultData {
@@ -132,18 +159,9 @@ export class WordMdPage {
 		return rsData;
 	}
 
-	showAlert(title: string, subTitle: string) {
-		let alert = this.alertCtrl.create({
-			title: title,
-			subTitle: subTitle,
-			buttons: ['OK']
-		});
-		alert.present();
-	}
-
 	export() {
-		if(this.words.length > 0) {
-			this.convertWortToData(this.words);
+		if(this.words_.length > 0) {
+			this.convertWortToData(this.words_);
 			const word0 = this.words[0];
 			const fileName: string = new Date().yyMMdd() + "_" 
 					+ word0.categoryName + "_" + word0.lectrueName + ".xlsx";
@@ -162,5 +180,54 @@ export class WordMdPage {
 			temp.push(word.body2);
 			this.data.push(temp);
 		});
+	}
+
+	addWord() {
+		this.words.push(new Word());
+	}
+
+	revertWord() {
+		this.showConfirmAlert("WARNNING!", "Do you agree to revert words?", () => {
+			this.words = this.words_.map(x => Object.assign({}, x));
+		});
+	}
+
+	removeAllWord() {
+		this.showConfirmAlert("WARNNING!", "Do you agree to remove all words?", () => {
+			this.words = [];
+		});
+	}
+
+	removeWord(index: number) {
+		this.words[index].status = 1;
+		this.setWordNum();
+	}
+
+	setWordNum(){
+		let i = 1;
+		this.words.forEach(word => {
+			if(word.status == 0) {
+				word.num = i++;
+			}
+		});
+	}
+
+	showConfirmAlert(title: string, message: string, okHandler) {
+		let confirm = this.alertCtrl.create({
+			title: title,
+			message: message,
+			buttons: [
+			  {
+				text: 'Cancel'
+			  },
+			  {
+				text: 'Ok',
+				handler: () => {
+					okHandler();
+				}
+			  }
+			]
+		});
+		confirm.present();
 	}
 }

@@ -138,9 +138,9 @@ export class WordService {
   async getWords(subKey: string, catKey:string, lecKey: string) {
     let words: Array<Word> = new Array<Word>();
 
-    this.wordRef.child(`${subKey}/list/${catKey}/list/${lecKey}/list`).orderByChild("num").once('value', snapshot => {
+    await this.wordRef.child(`${subKey}/list/${catKey}/list/${lecKey}/list`).orderByChild("num").once('value', snapshot => {
 			snapshot.forEach(word => {
-				words.push(word.val());
+				words.push(new Word(word.val()));
 				return false;
 			});
 		});

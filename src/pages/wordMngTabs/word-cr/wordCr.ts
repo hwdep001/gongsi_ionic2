@@ -148,7 +148,7 @@ export class WordCrPage {
 		}
 
 		let newWord: Word;
-		let i: number = 0;
+		let i: number = 1;
 		this.data.forEach(row => {
 			newWord = new Word();
 			newWord.num = i;
@@ -163,6 +163,7 @@ export class WordCrPage {
 			newWord.levels= {true: true};
 
 			this._word.pushWord(this.selectedSub, this.selectedCat, this.selectedLec, newWord);
+			i++;
 		});
 
 		loading.dismiss();

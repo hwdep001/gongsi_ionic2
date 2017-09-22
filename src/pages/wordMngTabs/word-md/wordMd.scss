@@ -8,16 +8,33 @@ page-wordMd {
             ion-item {
                 background-color: #eeeeee;
             }
-
-            .saveBtn {
-                width: 100px;
-            }
             
-            .downloadBtn {
-                cursor: pointer;
-                color: map-get($colors, level2);
-                background-color: #eeeeee;
-                font-size: 1.8em;
+            .table-header {
+                .saveBtn {
+                    width: 100px;
+                }
+    
+                .headBtn {
+                    cursor: pointer;
+                    background-color: #eeeeee;
+                    font-size: 1.8em;
+                }
+                
+                .downloadBtn {
+                    color: map-get($colors, level2);
+                }
+    
+                .addBtn {
+                    color: map-get($colors, secondary);
+                }
+
+                .undoBtn {
+                    color: map-get($colors, level-2);
+                }
+    
+                .trashBtn {
+                    color: map-get($colors, level-2);
+                }
             }
 
             .gtable {

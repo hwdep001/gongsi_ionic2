@@ -27,6 +27,8 @@ export class Word implements WordInterface {
     lectrueKey?: string;
     lectrueName?: string;
 
+    status?: number;
+
     constructor(obj?: WordInterface){
         this.key = obj && obj.key || null;
         this.head1 = obj && obj.head1 || null;
@@ -40,5 +42,7 @@ export class Word implements WordInterface {
         this.categoryName = obj && obj.categoryName || null;
         this.lectrueKey = obj && obj.lectrueKey || null;
         this.lectrueName = obj && obj.lectrueName || null;
+
+        this.status = 0;
     }
 }
