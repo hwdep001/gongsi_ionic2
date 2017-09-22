@@ -44,3 +44,17 @@ $ cordova plugin add cordova-plugin-inappbrowser --save
 $ cordova plugin add cordova-plugin-customurlscheme --variable \
   URL_SCHEME=com.firebase.cordova --save
 ```
+
+## [SheetJS js-xlsx](https://github.com/SheetJS/js-xlsx)
+
+```bash
+$ npm install --save xlsx
+```
+
+## [file saver](https://github.com/eligrey/FileSaver.js/)
+
+```bash
+$ npm install file-saver --save
+$ npm install @types/file-saver --save-dev
+```
+

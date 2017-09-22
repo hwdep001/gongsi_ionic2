@@ -3,7 +3,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Tab3 Page</ion-title>
+    <ion-title>Word creation</ion-title>
   </ion-navbar>
 </ion-header>
   
@@ -44,9 +44,6 @@
   <ion-list class="tablelist" *ngIf="searchFlag == true">
     <ion-item>
       <button ion-button item-left class="saveBtn" (click)="saveWord()">SAVE</button>
-      <!-- <button class="downloadBtn" (click)="export()" item-right>
-        <ion-icon name="cloud-download"></ion-icon>
-      </button> -->
       <button class="uploadBtn" (click)="file.click()" item-right>
         <ion-icon name="cloud-upload"></ion-icon>
       </button>

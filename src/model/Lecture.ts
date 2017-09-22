@@ -13,9 +13,10 @@ export class Lecture implements LectureInterface {
 
     list?: Array<any>;
 
-    constructor(key: string, name: string, categoryKey?: string){
-        this.key = key;
-        this.name = name;
-        this.categoryKey = categoryKey;
+    constructor(obj?: LectureInterface){
+        this.key = obj && obj.key || null;
+        this.name = obj && obj.name || null;
+        this.categoryKey = obj && obj.categoryKey || null;
+        this.list = obj && obj.list || null;
     }
 }

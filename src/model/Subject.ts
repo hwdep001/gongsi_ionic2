@@ -13,8 +13,9 @@ export class Subject implements SubjectInterface {
 
     list?: Array<any>;
 
-    constructor(name: string, num: number){
-        this.name = name;
-        this.num = num;
+    constructor(obj?: SubjectInterface) {
+        this.key = obj && obj.key || null;
+        this.name = obj && obj.name || null;
+        this.num = obj && obj.num || 0;
     }
 }

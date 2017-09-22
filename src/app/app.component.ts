@@ -1,3 +1,4 @@
+import { WordMngTabsPage } from './../pages/wordMngTabs/wordMngTabs';
 import { UserTabsPage } from './../pages/userTabs/userTabs';
 import { SplashPage } from './../pages/splash/spash';
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -96,6 +97,7 @@ export class MyApp {
     const homePage: PageInterface = { title: '대시보드', name: 'HomePage',  component: HomePage, icon: 'home' };
     const tabsPage: PageInterface = { title: 'Tabs', name: 'TabsPage', component: TabsPage, icon: 'home'};
     const userTabsPage: PageInterface = { title: '사용자 관리', name: 'UserTabsPage', component: UserTabsPage, icon: 'people' };
+    const wordMngTabsPage: PageInterface = { title: '단어 관리', name: 'WordMngTabsPage', component: WordMngTabsPage, icon: 'logo-wordpress' };
     const myInfoPage: PageInterface = { title: '내 정보', name: 'MyInfoPage', component: MyInfoPage, icon: 'information-circle' };
 
     if(this._auth.authenticated){
@@ -107,6 +109,7 @@ export class MyApp {
     if(this._auth.min) {
       this.adminPages = [];
       this.adminPages.push(userTabsPage);
+      this.adminPages.push(wordMngTabsPage);
     }
 
     if(this._auth.authenticated){

@@ -14,6 +14,8 @@ import { GlobalVar } from '../providers/global-var/global-var';
 import { LoadingService } from '../providers/loading-service/loading-service';
 import { UserService } from './../providers/user-service/user-service';
 import { UserLogService } from './../providers/userLog-service/userLog-service';
+import { WordService } from '../providers/word-service/word-service';
+import { FileService } from '../providers/file-service/file-service';
 
 import { MyApp } from './app.component';
 import { SplashPage } from './../pages/splash/spash';
@@ -29,6 +31,9 @@ import { UserTabsPage } from './../pages/userTabs/userTabs';
     import { UserDetailPage } from './../pages/userTabs/user/detail/userDetail';
   import { ApprovePage } from './../pages/userTabs/approval/approval';
   import { UserLogPage } from './../pages/userTabs/user-log/userLog';
+import { WordMngTabsPage } from './../pages/wordMngTabs/wordMngTabs';
+  import { WordCrPage } from './../pages/wordMngTabs/word-cr/wordCr';
+  import { WordMdPage } from './../pages/wordMngTabs/word-md/wordMd';
 import { MyInfoPage } from './../pages/myInfo/myInfo';
 
 @NgModule({
@@ -47,6 +52,9 @@ import { MyInfoPage } from './../pages/myInfo/myInfo';
         UserDetailPage,
       ApprovePage,
       UserLogPage,
+    WordMngTabsPage,
+      WordCrPage,
+      WordMdPage,
     MyInfoPage
   ],
   imports: [
@@ -73,6 +81,9 @@ import { MyInfoPage } from './../pages/myInfo/myInfo';
         UserDetailPage,
       ApprovePage,
       UserLogPage,
+    WordMngTabsPage,
+      WordCrPage,
+      WordMdPage,
     MyInfoPage
   ],
   providers: [
@@ -83,7 +94,9 @@ import { MyInfoPage } from './../pages/myInfo/myInfo';
     AuthService,
     LoadingService,
     UserService,
-    UserLogService
+    UserLogService,
+    WordService,
+    FileService
   ]
 })
 export class AppModule {}

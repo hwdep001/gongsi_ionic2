@@ -1,6 +1,6 @@
-import { Word } from './../../../model/Word';
 import { Lecture } from './../../../model/Lecture';
 import { Category } from './../../../model/Category';
+import { Word } from './../../../model/Word';
 import { Subject } from './../../../model/Subject';
 import { CommonUtil } from './../../../utils/commonUtil';
 import { User } from './../../../model/User';
@@ -49,8 +49,8 @@ export class Tab1Page {
 
   createSubject() {
     const subs: Array<any> = [
-      new Subject('영단어', 1), 
-      new Subject('외래어', 2)
+      new Subject({name: '영단어', num: 1}), 
+      new Subject({name: '외래어', num: 2})
     ];
 
     subs.forEach(sub => {
@@ -85,7 +85,7 @@ export class Tab1Page {
           const idx: string = this.convertId(i);
           
           let ref = firebase.database().ref(`/words/${sub.key}/list`).push();
-          const newCat = new Category(ref.key, `cat${idx}`);
+          const newCat = new Category({key: ref.key, name: `cat${idx}`});
           ref.set(newCat);
         }
       });
@@ -123,7 +123,7 @@ export class Tab1Page {
               const idx: string = this.convertId(i);
               
               let ref = firebase.database().ref(`/words/${sub.key}/list/${cat.key}/list`).push();
-              const newLec = new Lecture(ref.key, `lec${idx}`, cat.key);
+              const newLec = new Lecture({key: ref.key, name: `lec${idx}`, categoryKey: cat.key});
               ref.set(newLec);
             }
           });

@@ -1,14 +1,13 @@
+import { Lecture } from './../../../model/Lecture';
+import { Category } from './../../../model/Category';
 import { AuthService } from './../../../providers/auth-service/auth-service';
 
 import { CommonUtil } from './../../../utils/commonUtil';
 import { Word } from './../../../model/Word';
-import { Lecture } from './../../../model/Lecture';
-import { Category } from './../../../model/Category';
 import { Subject } from './../../../model/Subject';
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
-import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
 import * as firebase from 'firebase';
 
 @Component({
@@ -34,7 +33,6 @@ export class Tab2Page {
   selectedCnt: number;
 
   constructor(
-    private db: AngularFireDatabase,
     private _auth: AuthService
   ) {
     this.wordRef = firebase.database().ref("/words");

@@ -58,15 +58,15 @@
   <ion-card [ngClass]="'icard icard-border' + word.levels[_auth.uid]"  *ngFor="let word of words">
     <ion-item class="icard-item">
       <ion-row class="header-row">
-        <ion-col col-2 class="header-dic-icon">
+        <ion-col col-17 class="header-dic-icon">
           <button ion-button color="_gray" clear small icon-start>
             <ion-icon name='bookmarks'></ion-icon>
           </button>
         </ion-col>
-        <ion-col col-8 class="header-head1" align-self-center>
+        <ion-col col-66 class="header-head1" align-self-center>
           {{word.head1}}
         </ion-col>
-        <ion-col col-2 class="header-head2-icon" text-center>
+        <ion-col col-17 class="header-head2-icon" text-center>
           <button ion-button color="_gray" clear small icon-start>
             <ion-icon name='information'></ion-icon>
           </button>
@@ -88,7 +88,7 @@
     </ion-card-content>
   
     <ion-row class="icard-foot-row">
-      <ion-col col-2 class="foot-up" text-center>
+      <ion-col col-17 class="foot-up" text-center>
         <button ion-button color="_gray" clear small icon-start (click)="clickThumbs(1, word)">
           <ion-icon name='thumbs-up'></ion-icon>
         </button>
@@ -98,7 +98,7 @@
           {{word.categoryName}}-{{word.lectrueName}}
         </ion-note>
       </ion-col>
-      <ion-col col-2 class="foot-down" text-center>
+      <ion-col col-17 class="foot-down" text-center>
         <button ion-button color="_gray" clear small icon-start (click)="clickThumbs(-1, word)">
           <ion-icon name='thumbs-down'></ion-icon>
         </button>

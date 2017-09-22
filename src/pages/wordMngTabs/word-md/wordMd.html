@@ -3,7 +3,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Tab3 Page</ion-title>
+    <ion-title>Word modification</ion-title>
   </ion-navbar>
 </ion-header>
   
@@ -24,10 +24,6 @@
         <ion-option *ngFor="let cat of categories" value="{{cat.key}}">{{cat.name}}</ion-option>
       </ion-select>
     </ion-item>
-    <ion-item *ngIf="selectedCat == '-1'" >
-      <ion-label>New category name</ion-label>
-      <ion-input type="text" [(ngModel)]="newCatName" value="" ></ion-input>
-    </ion-item>
     <ion-item>
       <ion-label>Lecture</ion-label>
       <ion-select [(ngModel)]="selectedLec" cancelText="Cancel" okText="Select" 
@@ -35,22 +31,14 @@
         <ion-option *ngFor="let lec of lectures" value="{{lec.key}}">{{lec.name}}</ion-option>
       </ion-select>
     </ion-item>
-    <ion-item *ngIf="selectedLec == '-1'" >
-      <ion-label>New lecture name</ion-label>
-      <ion-input type="text" [(ngModel)]="newLecName" value="" ></ion-input>
-    </ion-item>
   </ion-list>
 
   <ion-list class="tablelist" *ngIf="searchFlag == true">
     <ion-item>
       <button ion-button item-left class="saveBtn" (click)="saveWord()">SAVE</button>
-      <!-- <button class="downloadBtn" (click)="export()" item-right>
+      <button class="downloadBtn" (click)="export()" item-right>
         <ion-icon name="cloud-download"></ion-icon>
-      </button> -->
-      <button class="uploadBtn" (click)="file.click()" item-right>
-        <ion-icon name="cloud-upload"></ion-icon>
       </button>
-      <input #file type="file" (change)="onFileChange($event)" multiple="false" style="display: none" />
     </ion-item>
     
     <ion-item>
@@ -62,12 +50,12 @@
           <ion-col col-30>body1</ion-col>
           <ion-col col-30>body2</ion-col>
         </ion-row>
-        <ion-row class="grow" *ngFor="let row of data; let i = index;">
+        <ion-row class="grow" *ngFor="let word of words; let i = index;">
           <ion-col col-6 class="num">{{i+1}}</ion-col>
-          <ion-col col-17><input type="text" [(ngModel)]="data[i][0]" value="{{row[0]}}"></ion-col>
-          <ion-col col-17><input type="text" [(ngModel)]="data[i][1]" value="{{row[1]}}"></ion-col>
-          <ion-col col-30><input type="text" [(ngModel)]="data[i][2]" value="{{row[2]}}"></ion-col>
-          <ion-col col-30><input type="text" [(ngModel)]="data[i][3]" value="{{row[3]}}"></ion-col>
+          <ion-col col-17><input type="text" [(ngModel)]="words[i].head1" value="{{word.head1}}"></ion-col>
+          <ion-col col-17><input type="text" [(ngModel)]="words[i].head2" value="{{word.head2}}"></ion-col>
+          <ion-col col-30><input type="text" [(ngModel)]="words[i].body1" value="{{word.body1}}"></ion-col>
+          <ion-col col-30><input type="text" [(ngModel)]="words[i].body2" value="{{word.body2}}"></ion-col>
         </ion-row>
       </ion-grid>
     </ion-item>

@@ -11,8 +11,9 @@ export class Category implements CategoryInterface {
 
     list?: Array<any>;
 
-    constructor(key: string, name: string){
-        this.key = key;
-        this.name = name;
+    constructor(obj?: CategoryInterface) {
+        this.key = obj && obj.key || null;
+        this.name = obj && obj.name || null;
+        this.list = obj && obj.list || null;
     }
 }

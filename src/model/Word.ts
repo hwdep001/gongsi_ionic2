@@ -27,7 +27,18 @@ export class Word implements WordInterface {
     lectrueKey?: string;
     lectrueName?: string;
 
-    constructor(){
+    constructor(obj?: WordInterface){
+        this.key = obj && obj.key || null;
+        this.head1 = obj && obj.head1 || null;
+        this.head2 = obj && obj.head2 || null;
+        this.body1 = obj && obj.body1 || null;
+        this.body2 = obj && obj.body2 || null;
+        this.num = obj && obj.num || 0;
+        this.levels = obj && obj.levels || null;
 
+        this.categoryKey = obj && obj.categoryKey || null;
+        this.categoryName = obj && obj.categoryName || null;
+        this.lectrueKey = obj && obj.lectrueKey || null;
+        this.lectrueName = obj && obj.lectrueName || null;
     }
 }

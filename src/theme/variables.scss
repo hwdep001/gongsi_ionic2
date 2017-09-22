@@ -41,7 +41,8 @@ $colors: (
   light:      #f4f4f4,
   dark:       #222,
 
-  content-bg: #e9ebee,
+  // content-bg: #e9ebee,
+  content-bg: #f5f5ff,
 
   level-2:    #f53d3d,
   level-1:    hsla(0, 90%, 60%, 0.40),
@@ -58,6 +59,8 @@ $chat-bubble:(
   background-si: rgb(100, 100, 255),
   background-so: rgb(255, 255, 80),
 );
+
+$grid-columns:               100 !default;
 
 // App iOS Variables
 // --------------------------------------------------
