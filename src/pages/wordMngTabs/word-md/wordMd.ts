@@ -1,5 +1,5 @@
 import { CommonUtil } from './../../../utils/commonUtil';
-import { AlertController } from 'ionic-angular';
+import { AlertController, reorderArray } from 'ionic-angular';
 import { Component } from '@angular/core';
 import * as firebase from 'firebase';
 
@@ -107,34 +107,36 @@ export class WordMdPage {
 			return;
 		}
 
-		let ref = this.wordRef.child(`${this.selectedSub}/list/${this.selectedCat}/list/${this.selectedLec}/list`);
-		
-		if(this.words.length < 1) {
-			ref.remove();
-
-		}else {
-			let i = 1;
-
-			this.words.forEach(word => {
-
-				if(CommonUtil.isStringEmpty(word.head1) && CommonUtil.isStringEmpty(word.body1)) {
-					return;
-
-				} else if(word.key != null && word.status == 1) {
-					ref.child(word.key).remove();
-
-				} else {
-					word.num = i++;
-					if(word.key == null) {
-						this._word.pushWord(this.selectedSub, this.selectedCat, this.selectedLec, word);
+		this.showConfirmAlert("WORNNING!", "Do you agree to save words?", () => {
+			let ref = this.wordRef.child(`${this.selectedSub}/list/${this.selectedCat}/list/${this.selectedLec}/list`);
+			
+			if(this.words.length < 1) {
+				ref.remove();
+	
+			}else {
+				let i = 1;
+	
+				this.words.forEach(word => {
+	
+					if(CommonUtil.isStringEmpty(word.head1) && CommonUtil.isStringEmpty(word.body1)) {
+						return;
+	
+					} else if(word.key != null && word.status == 1) {
+						ref.child(word.key).remove();
+	
 					} else {
-						ref.child(word.key).update(word);
+						word.num = i++;
+						if(word.key == null) {
+							this._word.pushWord(this.selectedSub, this.selectedCat, this.selectedLec, word);
+						} else {
+							ref.child(word.key).update(word);
+						}
 					}
-				}
-			});
-		}
-
-		this.changeLecture();
+				});
+			}
+	
+			this.changeLecture();
+		});
 	}
 
 	checkSaveData(): ResultData {
@@ -183,7 +185,11 @@ export class WordMdPage {
 	}
 
 	addWord() {
-		this.words.push(new Word());
+		this.words.push(new Word({num: this.words.length+1}));
+	}
+
+	refresh() {
+		this.changeLecture();
 	}
 
 	revertWord() {
@@ -210,6 +216,11 @@ export class WordMdPage {
 				word.num = i++;
 			}
 		});
+	}
+
+	reorderItems(indexes) {
+		this.words = reorderArray(this.words, indexes);
+		this.setWordNum();
 	}
 
 	showConfirmAlert(title: string, message: string, okHandler) {

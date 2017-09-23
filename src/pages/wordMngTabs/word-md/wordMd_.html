@@ -34,13 +34,10 @@
   </ion-list>
 
   <ion-list class="tablelist" *ngIf="searchFlag == true">
-    <ion-item class="table-menu">
+    <ion-item class="table-header">
       <button ion-button item-left class="saveBtn" (click)="saveWord()">SAVE</button>
       <button class="headBtn downloadBtn" (click)="export()" item-right>
         <ion-icon name="cloud-download"></ion-icon>
-      </button>
-      <button class="headBtn refreshBtn" (click)="refresh()" item-right>
-        <ion-icon name="refresh"></ion-icon>
       </button>
       <button class="headBtn addBtn" (click)="addWord()" item-right>
         <ion-icon name="add-circle"></ion-icon>
@@ -53,26 +50,32 @@
       </button>
     </ion-item>
     
-    <ion-item-group reorder="true" (ionItemReorder)="reorderItems($event)">
-    <ion-item  class="table-contents" no-lines *ngFor="let word of words; let i = index;">
-      <ion-grid>
-        <ion-row class="contents-row">
+    <ion-item>
+      <ion-grid class="gtable">
+        <ion-row class="gheader">
+          <ion-col col-4>N</ion-col>
+          <ion-col col-15>head1</ion-col>
+          <ion-col col-15>head2</ion-col>
+          <ion-col col-30>body1</ion-col>
+          <ion-col col-30>body2</ion-col>
+          <ion-col col-6></ion-col>
+        </ion-row>
+        <ion-row class="grow" *ngFor="let word of words; let i = index;" >
           <ng-container *ngIf="word.status == 0" >
-            <ion-col col-6 class="removeWordCol">
+            <ion-col col-4 class="num">{{word.num}}</ion-col>
+            <ion-col col-15><input type="text" [(ngModel)]="words[i].head1" value="{{word.head1}}"></ion-col>
+            <ion-col col-15><input type="text" [(ngModel)]="words[i].head2" value="{{word.head2}}"></ion-col>
+            <ion-col col-30><input type="text" [(ngModel)]="words[i].body1" value="{{word.body1}}"></ion-col>
+            <ion-col col-30><input type="text" [(ngModel)]="words[i].body2" value="{{word.body2}}"></ion-col>
+            <ion-col col-6>
               <button (click)="removeWord(i)">
                 <ion-icon name="remove-circle"></ion-icon>
               </button>
             </ion-col>
-            <ion-col col-6 class="num">{{word.num}}</ion-col>
-            <ion-col col-14><input type="text" [(ngModel)]="words[i].head1" value="{{word.head1}}"></ion-col>
-            <ion-col col-14><input type="text" [(ngModel)]="words[i].head2" value="{{word.head2}}"></ion-col>
-            <ion-col col-30><input type="text" [(ngModel)]="words[i].body1" value="{{word.body1}}"></ion-col>
-            <ion-col col-30><input type="text" [(ngModel)]="words[i].body2" value="{{word.body2}}"></ion-col>
           </ng-container>
         </ion-row>
       </ion-grid>
     </ion-item>
-    </ion-item-group>
   </ion-list>
 	
 </ion-content>
