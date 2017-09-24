@@ -45,16 +45,29 @@ $ cordova plugin add cordova-plugin-customurlscheme --variable \
   URL_SCHEME=com.firebase.cordova --save
 ```
 
+## [Cordova file](https://github.com/apache/cordova-plugin-file)
+
+```bash
+$ ionic cordova plugin add cordova-plugin-file
+$ npm install --save @ionic-native/file
+```
+
 ## [SheetJS js-xlsx](https://github.com/SheetJS/js-xlsx)
 
 ```bash
 $ npm install --save xlsx
 ```
 
-## [file saver](https://github.com/eligrey/FileSaver.js/)
+## [File saver](https://github.com/eligrey/FileSaver.js/)
 
 ```bash
 $ npm install file-saver --save
 $ npm install @types/file-saver --save-dev
 ```
 
+## [Cordova file transfer]
+
+```bash
+$ ionic cordova plugin add cordova-plugin-file-transfer
+$ npm install --save @ionic-native/file-transfer
+```
