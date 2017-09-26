@@ -11,6 +11,10 @@ export interface WordInterface {
     categoryName?: string;
     lectrueKey?: string;
     lectrueName?: string;
+    
+    //
+    status?: number;
+    myLevel?: number;
 }
 
 export class Word implements WordInterface {
@@ -27,7 +31,9 @@ export class Word implements WordInterface {
     lectrueKey?: string;
     lectrueName?: string;
 
+    //
     status?: number;
+    myLevel?: number;
 
     constructor(obj?: WordInterface){
         this.key = obj && obj.key || null;
@@ -44,5 +50,6 @@ export class Word implements WordInterface {
         this.lectrueName = obj && obj.lectrueName || null;
 
         this.status = 0;
+        this.myLevel = obj && obj.myLevel || 0;
     }
 }

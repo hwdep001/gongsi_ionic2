@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Study Page</ion-title>
+  </ion-navbar>
+</ion-header>
+  
+<ion-content class="icontent">
+
+  <ion-list class="searchlist">
+    <ion-item>
+      <ion-label>Category</ion-label>
+      <ion-select [(ngModel)]="selectedCats" cancelText="Cancel" okText="Select" multiple="true"
+                  (ionChange)="changeCategory()">
+        <ion-option *ngFor="let cat of categories" value="{{cat.key}}">{{cat.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Lecture</ion-label>
+      <ion-select [(ngModel)]="selectedLecs" cancelText="Cancel" okText="Select" multiple="true"
+                  [disabled]="selectedCats.length < 1" (ionChange)="checkSearchFlag()">
+        <ion-option *ngFor="let lec of lectures" value="{{lec.key}}">{{lec.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Levels</ion-label>
+      <ion-select [(ngModel)]="selectedLevs" cancelText="Cancel" okText="Select" multiple="true"
+                  (ionChange)="checkSearchFlag()">
+        <ion-option *ngFor="let lev of levels" value="{{lev.key}}">{{lev.value}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Count</ion-label>
+      <ion-select [(ngModel)]="selectedCnt" cancelText="Cancel" okText="Select"
+                  (ionChange)="checkSearchFlag()">
+        <ion-option *ngFor="let cnt of counts" value="{{cnt.key}}">{{cnt.value}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <button ion-button block medium [disabled]="searchFlag == false" (click)="startTest()">Start</button>
+    </ion-item>
+  </ion-list>
+	
+</ion-content>

@@ -34,6 +34,8 @@ export class WordCrPage {
 	newLecName: string = null;
 	data: Array<Array<any>> = [];
 
+	fileName: string = null;
+
 	constructor(
 		private alertCtrl: AlertController,
 		private _loading: LoadingService,
@@ -72,7 +74,9 @@ export class WordCrPage {
 		this.selectedCat = null;
 		this.setDefaultSearchData();
 
-		this.categories = await this._word.getCategories(this.selectedSub, true);
+		this.categories = new Array<Category>(
+			{key: "-1", name: "New category"});
+		this.categories.pushArray(await this._word.getCategories(this.selectedSub));
 		loading.dismiss();
 	}
 
@@ -85,7 +89,10 @@ export class WordCrPage {
 		this.selectedLec = null;
 		this.setDefaultSearchData();
 
-		this.lectures = await this._word.getLectures(this.selectedSub, this.selectedCat, true);
+		this.lectures = new Array<Lecture>(
+			{key: "-1", name: "New lecture"},
+			{key: "-2", name: "파일명으로"});
+		this.lectures.pushArray(await this._word.getLectures(this.selectedSub, this.selectedCat));
 		
 		if(this.selectedCat == "-1") {
 			this.selectedLec = this.lectures[0].key;
@@ -111,8 +118,15 @@ export class WordCrPage {
 
 		const dt: DataTransfer = <DataTransfer>(evt.target);
 		if(dt.files.length == 1) {
+			this.fileName = dt.files[0].name;
 			this.data = await this._file.uploadExcel(dt.files[0]);
-		};
+		} else {
+			this.data = [];
+			this.fileName = null;
+			if(this.selectedLec == "-2") {
+				this.newLecName = null;
+			}
+		}
 
 		loading.dismiss();
 	}
@@ -120,6 +134,7 @@ export class WordCrPage {
 	async saveWord() {
 		// checking form
 		const rsData: ResultData = await this.checkSaveData();
+		
 		if(!rsData.result){
 			this.showAlert("ERROR", rsData.msg);
 			return;
@@ -128,28 +143,37 @@ export class WordCrPage {
 		let loading = this._loading.getLoader(null, null);
 		loading.present();
 
+		let selectedLec_ = this.selectedLec;
+		let selectedLec__ = this.selectedLec;
 		let cat: Category;
 		if(this.selectedCat == '-1') {
 			cat = await this._word.pushCategory(this.selectedSub, new Category({name: this.newCatName}));
-			this.categories = await this._word.getCategories(this.selectedSub, true);
+			this.categories = new Array<Category>(
+				{key: "-1", name: "New category"});
+			this.categories.pushArray(await this._word.getCategories(this.selectedSub));
 			this.selectedCat = cat.key;
 		} else {
 			cat = await this._word.getCategory(this.selectedSub, this.selectedCat);
 		}
 
 		let lec: Lecture;
-		if(this.selectedLec == '-1') {
+		if(selectedLec_ == '-1' || selectedLec_ == "-2") {
 			lec = await this._word.pushLecture(this.selectedSub, this.selectedCat
 				, new Lecture({name: this.newLecName, categoryKey: cat.key}));
-			this.lectures = await this._word.getLectures(this.selectedSub, this.selectedCat, true);
-			this.selectedLec = lec.key;
+			
+			this.lectures = new Array<Lecture>(
+				{key: "-1", name: "New lecture"},
+				{key: "-2", name: "파일명으로"});
+			this.lectures.pushArray(await this._word.getLectures(this.selectedSub, this.selectedCat));
+			selectedLec_ = lec.key;
+
 		} else {
-			lec = await this._word.getLecture(this.selectedSub, this.selectedCat, this.selectedLec);
+			lec = await this._word.getLecture(this.selectedSub, this.selectedCat, selectedLec_);
 		}
 
 		let newWord: Word;
 		let i: number = 1;
-		this.data.forEach(row => {
+		for(let row of this.data) {
 			newWord = new Word();
 			newWord.num = i;
 			newWord.head1 = row[0] == undefined? null: row[0];
@@ -161,10 +185,14 @@ export class WordCrPage {
 			newWord.lectrueKey = lec.key;
 			newWord.lectrueName = lec.name; 
 			newWord.levels= {true: true};
-
-			this._word.pushWord(this.selectedSub, this.selectedCat, this.selectedLec, newWord);
+	
+			this._word.pushWord(this.selectedSub, this.selectedCat, selectedLec_, newWord);
 			i++;
-		});
+		}
+
+		if(selectedLec__ == "-2") {
+			this.selectedLec = "-2";
+		}
 
 		loading.dismiss();
 	}
@@ -199,7 +227,12 @@ export class WordCrPage {
 			}
 		}
 
-		if(this.selectedLec == '-1') {
+		if(this.selectedLec == '-1' || this.selectedLec == "-2") {
+
+			if(this.selectedLec == "-2" && this.fileName != null) {
+				this.newLecName = this.fileName.split(".")[0];
+			}
+
 			if(CommonUtil.isStringEmpty(this.newLecName)) {
 				rsData.msg = "Did not enter a LECTURE!";
 				return rsData;

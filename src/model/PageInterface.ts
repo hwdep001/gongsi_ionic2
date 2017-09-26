@@ -7,4 +7,5 @@ export interface PageInterface {
   index?: number;
   tabName?: string;
   tabComponent?: any;
+  param?: CustomObject;
 }

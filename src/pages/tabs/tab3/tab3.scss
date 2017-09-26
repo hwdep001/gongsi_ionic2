@@ -1,57 +1,5 @@
 page-tab3 {
     .icontent {
 
-        .searchlist {}
-
-        .tablelist {
-
-            ion-item {
-                background-color: #eeeeee;
-            }
-
-            .saveBtn {
-                width: 100px;
-            }
-            
-            .uploadBtn {
-                cursor: pointer;
-                color: map-get($colors, level2);
-                background-color: #eeeeee;
-                font-size: 1.8em;
-            }
-
-            .gtable {
-                padding: 0px;
-    
-                ion-col {
-                    padding: 0px;
-                }
-    
-                .gheader {
-                    text-align: center;
-                    
-                    ion-col {
-                        background-color: #eeeeee;
-                        border: 1px solid #ccc;
-                    }
-                }
-    
-                .grow {
-                    .num {
-                        text-align: center;
-                        background-color: #eeeeee;
-                        border: 1px solid #ccc;
-                    }
-
-                    input {
-                        width: 100%;
-                        padding: 0px;
-                        border: 1px solid #ccc;
-                    }
-                }
-            }
-        }
-
-        
     }
 }

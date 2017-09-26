@@ -3,6 +3,10 @@ declare global {
     yyMMdd(): string;
     yyyy_MM_dd_HH_mm_ss (): string;
   }
+
+  interface Array<T> {
+    pushArray(array: Array<T>): void;
+  }
 }
 
 Date.prototype.yyMMdd = function(): string {
@@ -33,6 +37,10 @@ Date.prototype.yyyy_MM_dd_HH_mm_ss = function(): string {
          ].join('');
 };
 
+Array.prototype.pushArray = function(array) {
+  this.push.apply(this, array);
+};
+
 export class CommonUtil {
     
     public static isStringEmpty(val: string): boolean {
@@ -57,6 +65,28 @@ export class CommonUtil {
       }
   
       return array;
+    }
+
+    public static getWordLevels() {
+      let levels = new Array<any>();
+      levels.push({key:2, value:'Very easy'});
+      levels.push({key:1, value:'Easy'});
+      levels.push({key:0, value:'Nomal'});
+      levels.push({key:-1, value:'Difficult'});
+      levels.push({key:-2, value:'Very difficult'});
+
+      return levels;
+    }
+
+    public static getWordCounts() {
+      let counts = new Array<any>();
+
+      counts.push({key: 0, value: "순서대로(최대 200개)"});
+      for(let i=20; i<=100; i+=10) {
+        counts.push({key: i, value: "랜덤 " + i + "개"});
+      }
+
+      return counts;
     }
   }
   

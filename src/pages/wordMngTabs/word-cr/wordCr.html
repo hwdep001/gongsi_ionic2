@@ -45,6 +45,9 @@
     <ion-item>
       <button ion-button item-left class="saveBtn" (click)="saveWord()">SAVE</button>
       <button class="uploadBtn" (click)="file.click()" item-right>
+        <ion-note>{{fileName}}</ion-note>
+      </button>
+      <button class="uploadBtn" (click)="file.click()" item-right>
         <ion-icon name="cloud-upload"></ion-icon>
       </button>
       <input #file type="file" (change)="onFileChange($event)" multiple="false" style="display: none" />

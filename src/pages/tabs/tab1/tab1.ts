@@ -48,14 +48,12 @@ export class Tab1Page {
 
   createSubject() {
     const subs: Array<any> = [
-      new Subject({name: '영단어', num: 1}), 
-      new Subject({name: '외래어', num: 2})
+      new Subject({key: "ew", name: '영단어', num: 1}), 
+      new Subject({key: "lw", name: '외래어', num: 2})
     ];
 
     subs.forEach(sub => {
-      let ref = firebase.database().ref(`/words`).push();
-      sub.key = ref.key;
-      ref.set(sub);
+      firebase.database().ref(`/words/${sub.key}`).set(sub);
     });
   }
 

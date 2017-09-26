@@ -21,6 +21,8 @@ import { MyApp } from './app.component';
 import { SplashPage } from './../pages/splash/spash';
 import { SigninPage } from './../pages/signin/signin';
 import { HomePage } from './../pages/home/home';
+import { StudyPage } from './../pages/study/study';
+import { TestCardPage } from './../pages/study/testCard/testCard';
 import { TabsPage } from './../pages/tabs/tabs';
   import { Tab3Page } from './../pages/tabs/tab3/tab3';
   import { Tab2Page } from './../pages/tabs/tab2/tab2';
@@ -42,6 +44,8 @@ import { MyInfoPage } from './../pages/myInfo/myInfo';
     SplashPage,
     SigninPage,
     HomePage,
+    StudyPage,
+      TestCardPage,
     TabsPage,
       Tab1Page,
       Tab2Page,
@@ -71,6 +75,8 @@ import { MyInfoPage } from './../pages/myInfo/myInfo';
     SplashPage,
     SigninPage,
     HomePage,
+    StudyPage,
+      TestCardPage,
     TabsPage,
       Tab1Page,
       Tab2Page,

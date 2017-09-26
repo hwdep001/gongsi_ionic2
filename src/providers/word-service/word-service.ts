@@ -1,3 +1,5 @@
+import { WordSearch } from './../../model/WordSearch';
+import { CommonUtil } from './../../utils/commonUtil';
 import { Word } from './../../model/Word';
 import { Lecture } from './../../model/Lecture';
 import { Category } from './../../model/Category';
@@ -22,7 +24,7 @@ export class WordService {
   async getSubjects() {
     let subjects: Array<Subject> = new Array<Subject>();
 
-    this.wordRef.orderByChild('num').once('value', snapshot => {
+    await this.wordRef.orderByChild('num').once('value', snapshot => {
 			snapshot.forEach(sub => {
 				subjects.push(sub.val());
 				return false;
@@ -30,7 +32,20 @@ export class WordService {
 		});
     
     return subjects;
-	}
+  }
+  
+  async getSubject(key: string) {
+    let subject: Subject;
+
+    await this.wordRef.orderByKey().equalTo(key).once('value', snapshot => {
+      snapshot.forEach(sub => {
+				subject = sub.val();
+				return false;
+			});
+    });
+
+    return subject;
+  }
 
   ///////////////////////////////////////////////////
 	// CATEGORY
@@ -46,14 +61,10 @@ export class WordService {
     return result;
   }
 
-  async getCategories(subKey: string, newCategory?: boolean) {
+  async getCategories(subKey: string) {
     let categories: Array<Category> = new Array<Category>();
     
-    if(newCategory) {
-      categories.push({key: "-1", name: "New category"});
-    }
-
-    this.wordRef.child(`${subKey}/list`).orderByChild("name").once('value', snapshot => {
+    await this.wordRef.child(`${subKey}/list`).orderByChild("name").once('value', snapshot => {
 			snapshot.forEach(cat => {
 				categories.push(cat.val());
 				return false;
@@ -95,14 +106,10 @@ export class WordService {
     return result;
   }
 
-  async getLectures(subKey: string, catKey:string, newLecture?: boolean) {
+  async getLectures(subKey: string, catKey:string) {
     let lectures: Array<Lecture> = new Array<Lecture>();
     
-    if(newLecture) {
-      lectures.push({key: "-1", name: "New Lecture"});
-    }
-
-    this.wordRef.child(`${subKey}/list/${catKey}/list`).orderByChild("name").once('value', snapshot => {
+    await this.wordRef.child(`${subKey}/list/${catKey}/list`).orderByChild("name").once('value', snapshot => {
 			snapshot.forEach(lec => {
 				lectures.push(lec.val());
 				return false;
@@ -135,7 +142,7 @@ export class WordService {
 	// WORD
   ///////////////////////////////////////////////////
   
-  async getWords(subKey: string, catKey:string, lecKey: string) {
+  async getWords(subKey: string, catKey: string, lecKey: string) {
     let words: Array<Word> = new Array<Word>();
 
     await this.wordRef.child(`${subKey}/list/${catKey}/list/${lecKey}/list`).orderByChild("num").once('value', snapshot => {
@@ -156,4 +163,66 @@ export class WordService {
     return newWord;
   }
 
+  updateWordLevel(subKey: string, catKey: string, lecKey: string, wordKey: string, uid: string, level: number) {
+    this.wordRef.child(`${subKey}/list/${catKey}/list/${lecKey}/list/${wordKey}/levels`).update({[uid]: level});
+  }
+  removeWordLevel(subKey: string, catKey: string, lecKey: string, wordKey: string, uid: string) {
+    this.wordRef.child(`${subKey}/list/${catKey}/list/${lecKey}/list/${wordKey}/levels/${uid}`)
+    .remove();
+  }
+
+  async searchWord(uid: string, wordSearch: WordSearch) {
+    let words: Array<Word> = new Array<Word>();
+
+    let ref = this.wordRef.child(`${wordSearch.sub}/list`);
+
+    let num = 1;
+    for(let catKey of wordSearch.cats) {
+      let subref = ref.child(`${catKey}/list`);
+      for(let lecKey of wordSearch.lecs) {
+        await subref.child(`${lecKey}/list`).orderByChild("name").once("value", snapshot => {
+          snapshot.forEach(word => {
+            const tempWord = word.val();
+            const userLev = tempWord.levels[uid] == null ? 0 : tempWord.levels[uid];
+
+            wordSearch.levs.forEach(lev => {
+              if(lev == userLev) {
+                tempWord.levels = null;
+                tempWord.myLevel = userLev;
+                tempWord.num = num++;
+                words.push(tempWord);
+              }
+            });
+
+            return false;
+          });
+        });
+      }
+    }
+
+    if(wordSearch.cnt == 0) {
+      words = words.slice(0, 200);
+    } else {
+      words = this.shuffleWordByCount(words, wordSearch.cnt);
+    }
+    
+    return words;
+  }
+
+  private shuffleWordByCount(words: Word[], count: number) {
+    let result: Array<Word> = new Array<Word>();
+    let temp: Word, index: number, num: number = 1;
+    let max = words.length;
+    count = (words.length < count) ? words.length : count;
+
+    while (num <= count) {
+      index = Math.floor(Math.random() * max--);
+      temp = words[index];
+      temp.num = num++;
+      words.splice(index, 1);
+      result.push(temp);
+    }
+    
+    return result;
+  }
 }

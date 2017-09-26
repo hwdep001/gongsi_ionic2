@@ -19,7 +19,7 @@ export class LoadingService {
       spinner: spinner,
       content: content,
       dismissOnPageChange: dismissOnPageChange,
-      duration: 5000
+      duration: 15000
     });
   }
 

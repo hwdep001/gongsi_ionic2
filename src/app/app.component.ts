@@ -18,6 +18,7 @@ import { UserLog } from './../model/UserLog';
 
 import { SigninPage } from './../pages/signin/signin';
 import { HomePage } from './../pages/home/home';
+import { StudyPage } from './../pages/study/study';
 import { TabsPage } from './../pages/tabs/tabs';
 import { MyInfoPage } from './../pages/myInfo/myInfo';
 
@@ -94,6 +95,8 @@ export class MyApp {
 
   private setPages(): void {
     const homePage: PageInterface = { title: '대시보드', name: 'HomePage',  component: HomePage, icon: 'home' };
+    const ewPage: PageInterface = { title: '영단어', name: 'EwPage',  component: StudyPage, param: {key: "ew"}, icon: 'book' };
+    const lwPage: PageInterface = { title: '외래어', name: 'LwPage',  component: StudyPage, param: {key: "lw"}, icon: 'book' };
     const tabsPage: PageInterface = { title: 'Tabs', name: 'TabsPage', component: TabsPage, icon: 'home'};
     const userTabsPage: PageInterface = { title: '사용자 관리', name: 'UserTabsPage', component: UserTabsPage, icon: 'people' };
     const wordMngTabsPage: PageInterface = { title: '단어 관리', name: 'WordMngTabsPage', component: WordMngTabsPage, icon: 'logo-wordpress' };
@@ -102,6 +105,8 @@ export class MyApp {
     if(this._auth.authenticated){
       this.navigatePages = [];
       this.navigatePages.push(homePage);
+      this.navigatePages.push(ewPage);
+      this.navigatePages.push(lwPage);
       this.navigatePages.push(tabsPage);
     }
 
@@ -143,26 +148,7 @@ export class MyApp {
   }
 
   private exitApp() {
-    let confirm = this.alertCtrl.create({
-      message: '종료하시겠습니까?',
-      buttons: [
-        { text: 'No' },
-        {
-          text: 'Yes',
-          handler: () => {
-            if(this._auth.authenticated){
-              const userLog: UserLog = {
-                createDate: new Date().yyyy_MM_dd_HH_mm_ss(),
-                type: "ex",
-                uid: this._auth.uid
-              }
-              this._userLog.createUserLog(userLog);
-            }
-            this.platform.exitApp();
-          }
-        }
-      ]
-    });
+    
     
     const overlay = this.app._appRoot._overlayPortal.getActive();
     const nav = this.app.getActiveNavs()[0];
@@ -171,16 +157,30 @@ export class MyApp {
       this.menu.close();
     }else if(overlay && overlay.dismiss) {
       overlay.dismiss();
+    } else if(nav.getActive().name == "TestCardPage"){
+      this.showConfirmAlert("종료하시겠습니까?", ()=> {
+        nav.pop();  
+      });
     } else if(nav.canGoBack()){
       nav.pop();
     } else if(Date.now() - this.lastBack < 500) {
-      confirm.present();
+      this.showConfirmAlert("EXIT?", () => {
+        if(this._auth.authenticated){
+          const userLog: UserLog = {
+            createDate: new Date().yyyy_MM_dd_HH_mm_ss(),
+            type: "ex",
+            uid: this._auth.uid
+          }
+          this._userLog.createUserLog(userLog);
+        }
+        this.platform.exitApp();
+      });
     }
     this.lastBack = Date.now();
   }
 
-  openPage(page) {
-    this.nav.setRoot(page.component);
+  openPage(page: PageInterface) {
+    this.nav.setRoot(page.component, page.param);
   }
 
   isActive(page: PageInterface) {
@@ -193,9 +193,14 @@ export class MyApp {
     //   }
     //   return;
     // }
-
-    if (this.nav.getActive() && this.nav.getActive().name === page.name) {
-      return 'primary';
+    
+    if (this.nav.getActive()) {
+      if(this.nav.getActive().name === page.name) {
+        return 'primary';
+      } else if(this.nav.getActive().name == "StudyPage" && (page.name == "EwPage" || page.name == "LwPage") 
+                && this.nav.getActive().getNavParams().get("key") == page.param.key) {
+        return 'primary';
+      }
     }
     return;
   }
@@ -212,6 +217,22 @@ export class MyApp {
     });
 
     toast.present();
+  }
+
+  showConfirmAlert(message: string, yesHandler) {
+    let confirm = this.alertCtrl.create({
+      message: message,
+      buttons: [
+        { text: 'No' },
+        {
+          text: 'Yes',
+          handler: () => {
+            yesHandler();
+          }
+        }
+      ]
+    });
+    confirm.present();
   }
 
 }
